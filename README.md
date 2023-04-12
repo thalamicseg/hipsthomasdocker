@@ -1,9 +1,7 @@
 # THOMAS docker version
-This is a docker container for HIPS-THOMAS, which is the modified pipeline for accurate segmentation of T1w (SPGR,MPRAGE) data. Note that HIPS-THOMAS performs much better than THOMAS for T1w data. The WMn-MPRAGE segmentation is unchanged and this container can be used for both T1w and WMn analyses.
+This is a docker container for HIPS-THOMAS, a modified pipeline for accurate segmentation of T1w (SPGR,MPRAGE) data based on THOMAS. Note that HIPS-THOMAS performs much better than THOMAS for T1w data. The WMn-MPRAGE segmentation is unchanged and this container can be used on both T1w and WMn data by choosing the right wrapper script. The HIPS-THOMAS workflow is shown below:-
 
-HIPS-THOMAS workflow is shown below:-
-
-![HIPS-THOMAS workflow](https://github.com/thalamicseg/hipsthomasdocker/blob/thomaships.jpg?raw=true)
+![HIPS-THOMAS workflow](https://github.com/thalamicseg/hipsthomasdocker/blob/main/hipsthomas.JPG)
 
 
 ## Installation instructions
@@ -13,11 +11,11 @@ HIPS-THOMAS workflow is shown below:-
 
 - Download the files using ```git clone https://github.com/thalamicseg/hipsthomasdocker.git``` which will create a **hipsthomasdocker** directory
 
-- Run ```docker build -t thomas .``` inside the thomasdocker directory after the download in step 1 to create a container named thomas. Note the period at the end of the command which is critical.
+- If you had previously built the THOMAS docker directly from a Dockerfile instead of using the dockerhub version, use thomas instead of anagrammarian/thomas in the Dockerfile 
 
-- The container is 41Gb so make sure the disk/partition you are installing it in has enough space. During buildtime, it might need more for temporary files so use 100G to be safe. The required dependencies i.e. ANTs (2.3.4), FSL (5.0), c3d, and THOMAS code from github will be all downloaded which will take time. So please be patient !
+- Run ```docker build -t thomasmerged .``` inside the hipsthomasdocker directory after the download in step 1 to create a container named thomasmerged. Note the period at the end of the command which is critical.
 
-- When the build finishes, type ```docker images``` to see thomas listed as a repository. If you see it, you are good to go !
+- When the build finishes, type ```docker images``` to see thomasmerged listed as a repository. If you see it, you are good to go !
 
   
 ## Docker usage
