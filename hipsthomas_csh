@@ -1,0 +1,208 @@
+#!/bin/tcsh
+set c = (1 2 4 5 6 7 8 9 10 11 12 13 14)
+
+if ( $?THOMAS_HOME ) then
+    echo "THOMAS_HOME setting of $THOMAS_HOME"
+    set Thomas = $THOMAS_HOME
+else
+    echo "Environment variable THOMAS_HOME variable not set, add it to .cshrc or .bashrc and try again"
+    exit 1
+endif
+
+if ( $?OSTYPE) then
+    if ( "$OSTYPE" =~ "*linux*" ) then 
+        set Ismac = 0
+        echo "Linux OS detected"
+    else if ( "$OSTYPE" =~ "*darwin*" ) then
+        set Ismac = 1
+        echo "Mac OS detected, running ANTS jointfusion" 
+    else
+        echo "Invalid OS $OSTYPE, only linux or Darwin supported"
+        exit 1
+    endif
+endif
+
+if ( $#argv >= 1 && $#argv <= 10) then
+
+    set fixedImageMask = "NULL"
+    set movingImageMask = "NULL"
+    set hips = 0
+    set v = 1
+    set bigcrop = ""
+    set t1 = ""
+    foreach i ( $* )
+	@ v++	
+        if ( "$i" == "-i") then
+		set inputImage = $argv[$v]
+	 endif
+        if ( "$i" == "-xf") then
+		set fixedImageMask = $argv[$v]
+	 endif
+     	if ( "$i" == "-xm") then
+		set movingImageMask = $argv[$v]
+        endif
+     	if ( "$i" == "-t1") then
+		set t1 = "-c"
+		set hips = 1
+                echo "input is standard T1, doing synthesis"
+        endif
+     	if ( "$i" == "-big") then
+		set bigcrop = "-B"
+        endif
+  end
+
+    set x = $inputImage
+    set y = $inputImage:t
+
+
+    if ( $x == $y) then
+        set fileok = 1
+    else
+        set fileok = 0
+        echo "First argument has to be just the WMn MPRAGE file name without the full path"
+        echo "Please call $0:t in the directory containing the WMn file"
+	exit 1
+    endif
+else
+     set fileok = 0
+     echo "Usage: thomas wmnfile <lo>"
+     echo "Optional argument lo is for just running left side"
+     exit 1
+endif
+
+  set extraArgs = "$t1 $bigcrop"
+  echo "running thomas on $inputImage with masks $fixedImageMask $movingImageMask and arguments $extraArgs"
+
+  if (-d temp) then
+    echo "Deleting temp"
+    \rm -rf temp
+  endif
+
+  if ($Ismac == 1) then
+	  ${Thomas}/THOMAS.py -v -xm $movingImageMask -xf $fixedImageMask -a v2 -p 4 -v $extraArgs --tempdir temp $inputImage ALL
+  else
+	  ${Thomas}/THOMAS.py -v -xm $movingImageMask -xf $fixedImageMask -a v2 -p 4 -v $extraArgs --jointfusion --tempdir temp $inputImage ALL
+  endif
+  mkdir left
+  cp -rf temp/crop_* .
+  mv ?-*.nii.gz left
+  mv ??-*.nii.gz left
+  mv m?-*.nii.gz left
+  mv m??-*.nii.gz left
+  mv *4567* left
+  mv 6_* left
+  mv san* left
+  mv mask* left
+  mv crop_* left
+  mv rigid* left
+  mv temp/*Warp* temp/*Aff* left
+  mv temp/registered.nii.gz left
+  mv left/$inputImage .
+
+  cd left
+  # replace JF 5VLa with MV 5VLa as it is more robust
+  if ($hips == 1) then
+      cp 5-VLa.nii.gz jf5-VLa.nii.gz
+      cp m5-VLa.nii.gz 5-VLa.nii.gz
+  endif
+  ${Thomas}/fuselabels
+  python2 ${Thomas}/uncrop.py thomas.nii.gz thomasfull.nii.gz mask_inp.nii.gz
+  set h = $inputImage:t:r:r
+  antsApplyTransforms -d 3 -i ${Thomas}/templ_93x187x68.nii.gz -r crop_{$h}.nii.gz -o regn.nii.gz -t \[${h}0GenericAffine.mat, 1\] -t ${h}1InverseWarp.nii.gz
+  ${Thomas}/swapdimlike.py regn.nii.gz ../$inputImage regn.nii.gz
+  ${Thomas}/swapdimlike.py crop_{$h}.nii.gz ../$inputImage crop_{$h}.nii.gz
+  if ($hips == 1) then
+      cp ../temp/bcrop_{$h}.nii.gz ocrop_{$h}.nii.gz
+  endif
+  foreach z ($c)
+  foreach zz ($z-*.nii.gz)
+    echo $zz:r:r
+  end
+  set x = `fslstats $zz -V | awk '{print $2}'`
+  echo $zz:r:r $x >> nucleiVols.txt
+  end   
+  foreach z ($c)
+  foreach zz (m$z-*.nii.gz)
+    echo $zz:r:r
+  end
+  set x = `fslstats $zz -V | awk '{print $2}'`
+  echo $zz:r:r $x >> nucleiVolsMV.txt
+  end   
+  mkdir MV
+  mv m*-* MV
+  mv nucleiVolsMV* MV
+  cd ..
+  echo "Done; segmentation results in directory left"
+
+ # Now do the right side 
+  if (-d tempr) then
+    echo "Deleting tempr"
+    \rm -rf tempr
+  endif
+
+    if ($Ismac == 1) then
+          ${Thomas}/THOMAS.py -xm $movingImageMask -xf $fixedImageMask -a v2 -p 4 -v $extraArgs -R --tempdir tempr $inputImage ALL
+      else
+          ${Thomas}/THOMAS.py -xm $movingImageMask -xf $fixedImageMask -a v2 -p 4 -v $extraArgs -R --jointfusion --tempdir tempr $inputImage ALL
+      endif
+
+      mkdir right
+#     THOMAS flips so we want the original crop not the flipped
+#     cp -rf tempr/crop_* .
+      mv ?-*.nii.gz right
+      mv ??-*.nii.gz right
+      mv m?-*.nii.gz right
+      mv m??-*.nii.gz right
+      mv *4567* right
+      mv 6_* right
+      mv san* right
+      mv mask* right
+      mv crop_* right
+      mv rigid* right
+      mv tempr/*Warp* tempr/*Aff* right
+      mv tempr/registered.nii.gz right
+      mv right/$inputImage .
+
+      cd right
+      # replace JF 5VLa with MV 5VLa as it is more robust
+      if ($hips == 1) then
+          cp 5-VLa.nii.gz jf5-VLa.nii.gz
+          cp m5-VLa.nii.gz 5-VLa.nii.gz
+      endif
+      ${Thomas}/fuselabels
+      python2 ${Thomas}/uncrop.py thomas.nii.gz thomasfull.nii.gz mask_inp.nii.gz
+      mv thomas.nii.gz thomasr.nii.gz
+      mv thomasfull.nii.gz thomasrfull.nii.gz
+      set h = $inputImage:t:r:r
+      antsApplyTransforms -d 3 -i ${Thomas}/templ_93x187x68.nii.gz -r ../tempr/crop_{$h}.nii.gz -o regn.nii.gz -t \[${h}0GenericAffine.mat, 1\] -t ${h}1InverseWarp.nii.gz
+      fslswapdim regn.nii.gz -x y z regn.nii.gz
+      ${Thomas}/swapdimlike.py regn.nii.gz ../$inputImage regn.nii.gz
+      cp ../tempr/crop_{$h}.nii.gz rcrop_{$h}.nii.gz
+      fslswapdim rcrop_{$h}.nii.gz -x y z rcrop_{$h}.nii.gz
+      ${Thomas}/swapdimlike.py rcrop_{$h}.nii.gz ../$inputImage rcrop_{$h}.nii.gz
+      # match the left side convention 
+      if ($hips == 1) then
+          mv crop_{$h}.nii.gz ocrop_{$h}.nii.gz
+      endif
+      mv rcrop_{$h}.nii.gz crop_{$h}.nii.gz
+
+      foreach z ($c)
+      foreach zz ($z-*.nii.gz)
+        echo $zz:r:r
+      end
+      set x = `fslstats $zz -V | awk '{print $2}'`
+      echo $zz:r:r $x >> nucleiVols.txt
+      end   
+      foreach z ($c)
+      foreach zz (m$z-*.nii.gz)
+        echo $zz:r:r
+      end
+      set x = `fslstats $zz -V | awk '{print $2}'`
+      echo $zz:r:r $x >> nucleiVolsMV.txt
+      end  
+      mkdir MV
+      mv m*-* MV
+      mv nucleiVolsMV* MV
+      cd ..
+  echo "Done; segmentation results in directory right"
+

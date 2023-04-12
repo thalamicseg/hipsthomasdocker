@@ -1,0 +1,206 @@
+#!/bin/tcsh
+set c = (1 2 4 5 6 7 8 9 10 11 12 13 14)
+
+if ( $?THOMAS_HOME ) then
+    echo "THOMAS_HOME setting of $THOMAS_HOME"
+    set Thomas = $THOMAS_HOME
+else
+    echo "Environment variable THOMAS_HOME variable not set, add it to .cshrc or .bashrc and try again"
+    exit 1
+endif
+
+if ( $?OSTYPE) then
+    if ( "$OSTYPE" =~ "*linux*" ) then 
+        set Ismac = 0
+        echo "Linux OS detected"
+    else if ( "$OSTYPE" =~ "*darwin*" ) then
+        set Ismac = 1
+        echo "Mac OS detected, running ANTS jointfusion" 
+    else
+        echo "Invalid OS $OSTYPE, only linux or Darwin supported"
+        exit 1
+    endif
+endif
+
+if ( $#argv >= 1 && $#argv <= 2 ) then
+    set x = $1
+    set y = $1:t
+    if ( $x == $y) then
+        echo "File name OK"
+        set fileok = 1
+    else
+        set fileok = 0
+        echo "First argument has to be just the WMn MPRAGE file name without the full path"
+        echo "Please call $0:t in the directory containing the MPRAGE/T1 file"
+	exit 1
+    endif
+else
+     set fileok = 0
+     echo "Usage: thomas mprage/T1 <lo>"
+     echo "Optional argument lo is for just running left side"
+     exit 1
+endif
+
+if ( $#argv == 1 ) then
+  echo "Running left and right thalamus MVCC big"
+  if (-d temp) then
+    echo "Deleting temp"
+    \rm -rf temp
+  endif
+  ${Thomas}/THOMAS.py -a v2 -p 4 -v -M --tempdir temp -B $1 ALL
+  mkdir left
+  cp -rf temp/crop_* .
+  mv ?-*.nii.gz left
+  mv ??-*.nii.gz left
+  mv 4567* left
+  mv 6_* left
+  mv san* left
+  mv mask* left
+  mv crop_* left
+  mv rigid* left
+  mv temp/*Warp* temp/*Aff* left
+  mv temp/registered.nii.gz left
+  mv left/$1 .
+
+  cd left
+  ${Thomas}/fuselabels
+  python2 ${Thomas}/uncrop.py thomas.nii.gz thomasfull.nii.gz mask_inp.nii.gz
+  set h = $1:t:r:r
+  antsApplyTransforms -d 3 -i ${Thomas}/templ_93x187x68.nii.gz -r crop_{$1} -o regn.nii.gz -t \[${h}0GenericAffine.mat, 1\] -t ${h}1InverseWarp.nii.gz
+  foreach z ($c)
+  foreach zz ($z-*.nii.gz)
+    echo $zz:r:r
+  end
+  set x = `fslstats $zz -V | awk '{print $2}'`
+  echo $zz:r:r $x >> nucleiVols.txt
+  end   
+  cd ..
+  echo "Done; segmentation results in directory left"
+
+ # Now do the right side 
+  if (-d tempr) then
+    echo "Deleting tempr"
+    \rm -rf tempr
+  endif
+
+  ${Thomas}/THOMAS.py -a v2 -p 4 -v -R -M --tempdir tempr -B $1 ALL
+
+      mkdir right
+#     THOMAS flips so we want the original crop not the flipped
+#     cp -rf tempr/crop_* .
+      mv ?-*.nii.gz right
+      mv ??-*.nii.gz right
+      mv 4567* right
+      mv 6_* right
+      mv san* right
+      mv mask* right
+      mv crop_* right
+      mv rigid* right
+      mv tempr/*Warp* tempr/*Aff* right
+      mv tempr/registered.nii.gz right
+      mv right/$1 .
+
+      cd right
+      ${Thomas}/fuselabels
+      python2 ${Thomas}/uncrop.py thomas.nii.gz thomasfull.nii.gz mask_inp.nii.gz
+      mv thomas.nii.gz thomasr.nii.gz
+      mv thomasfull.nii.gz thomasrfull.nii.gz
+      set h = $1:t:r:r
+      antsApplyTransforms -d 3 -i ${Thomas}/templ_93x187x68.nii.gz -r crop_{$1} -o regn.nii.gz -t \[${h}0GenericAffine.mat, 1\] -t ${h}1InverseWarp.nii.gz
+      foreach z ($c)
+      foreach zz ($z-*.nii.gz)
+        echo $zz:r:r
+      end
+      set x = `fslstats $zz -V | awk '{print $2}'`
+      echo $zz:r:r $x >> nucleiVols.txt
+      end   
+      cd ..
+  echo "Done; segmentation results in directory right"
+endif
+
+  if ( $#argv == 2) then
+    if ($2 == lo) then
+  if (-d temp) then
+    echo "Deleting temp"
+    \rm -rf temp
+  endif
+      echo "Running only left thalamus MV big"
+
+  ${Thomas}/THOMAS.py -a v2 -p 4 -v -M --tempdir temp -B $1 ALL
+      mkdir left
+      cp -rf temp/crop_* .
+      mv ?-*.nii.gz left
+      mv ??-*.nii.gz left
+      mv 4567* left
+      mv 6_* left
+      mv san* left
+      mv mask* left
+      mv crop_* left
+      mv rigid* left
+      mv temp/*Warp* temp/*Aff* left
+      mv temp/registered.nii.gz left
+      mv left/$1 .
+
+      cd left
+      {$Thomas}/fuselabels
+      python2 {$Thomas}/uncrop.py thomas.nii.gz thomasfull.nii.gz mask_inp.nii.gz
+      set h = $1:t:r:r
+      antsApplyTransforms -d 3 -i ${Thomas}/templ_93x187x68.nii.gz -r crop_{$1} -o regn.nii.gz -t \[${h}0GenericAffine.mat, 1\] -t ${h}1InverseWarp.nii.gz
+      foreach z ($c)
+      foreach zz ($z-*.nii.gz)
+        echo $zz:r:r
+      end
+      set x = `fslstats $zz -V | awk '{print $2}'`
+      echo $zz:r:r $x >> nucleiVols.txt
+      end   
+      echo "Done; segmentation results in directory left"
+      cd ..
+    endif
+ # Now do the right side 
+  if (-d tempr) then
+    echo "Deleting tempr"
+    \rm -rf tempr
+  endif
+
+    if ($2 == ro) then
+      echo "Running only right thalamus MV big"
+  ${Thomas}/THOMAS.py -a v2 -p 4 -v -R -M --tempdir tempr -B $1 ALL
+
+      mkdir right
+#     THOMAS flips so we want the original crop not the flipped
+#     cp -rf tempr/crop_* .
+      mv ?-*.nii.gz right
+      mv ??-*.nii.gz right
+      mv 4567* right
+      mv 6_* right
+      mv san* right
+      mv mask* right
+      mv crop_* right
+      mv rigid* right
+      mv tempr/*Warp* tempr/*Aff* right
+      mv tempr/registered.nii.gz right
+      mv right/$1 .
+
+      cd right
+      ${Thomas}/fuselabels
+      python2 ${Thomas}/uncrop.py thomas.nii.gz thomasfull.nii.gz mask_inp.nii.gz
+      mv thomas.nii.gz thomasr.nii.gz
+      mv thomasfull.nii.gz thomasrfull.nii.gz
+      set h = $1:t:r:r
+      antsApplyTransforms -d 3 -i ${Thomas}/templ_93x187x68.nii.gz -r crop_{$1} -o regn.nii.gz -t \[${h}0GenericAffine.mat, 1\] -t ${h}1InverseWarp.nii.gz
+      foreach z ($c)
+      foreach zz ($z-*.nii.gz)
+        echo $zz:r:r
+      end
+      set x = `fslstats $zz -V | awk '{print $2}'`
+      echo $zz:r:r $x >> nucleiVols.txt
+      end   
+      cd ..
+  echo "Done; segmentation results in directory right"
+  endif
+
+    if ( ($2 == lo) || ($2 == ro)) then
+    else
+      echo "Unrecognized second argument; usage: thomas mprage/T1file or thomas mprage/T1file lo/ro"
+    endif
+  endif
