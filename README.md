@@ -7,13 +7,13 @@ This is a docker container for HIPS-THOMAS, a modified pipeline for accurate seg
 ## Installation instructions
 - Make sure docker is installed already on your machine or install it from here https://docs.docker.com/get-docker/.  
 
-- If you do not have a THOMAS container built from a Dockerfile, please download the container from dockerhub ```docker pull anagrammarian/thomas```. Without this step, the rest will NOT work.
+- If you do NOT have a THOMAS already container built from https://github.com/thalamicseg/thomasdocker,  download the container from dockerhub ```docker pull anagrammarian/thomas```. Without this step, the rest will NOT work as this dockerpage only provides the files needed for the HIPS preprocessing step and some wrapper scripts.
 
-- Download the files using ```git clone https://github.com/thalamicseg/hipsthomasdocker.git``` which will create a **hipsthomasdocker** directory
+- Download the HIPS-THOMAS files using ```git clone https://github.com/thalamicseg/hipsthomasdocker.git``` which will create a **hipsthomasdocker** directory
 
-- If you had previously built the THOMAS docker directly from a Dockerfile instead of using the dockerhub version, use thomas instead of anagrammarian/thomas in the Dockerfile 
+- Note: if you had previously built the THOMAS docker directly from a Dockerfile instead of downloading from the dockerhub, use thomas instead of anagrammarian/thomas in the Dockerfile. If you are not sure, run ``docker images`` to see if it says thomas or anagrammarian/thomas
 
-- Run ```docker build -t thomasmerged .``` inside the hipsthomasdocker directory after the download in step 1 to create a container named thomasmerged. Note the period at the end of the command which is critical.
+- Run ```docker build -t thomasmerged .``` inside the hipsthomasdocker directory after the download in step 3 to create a container named thomasmerged. Note the period at the end of the command which is critical.
 
 - When the build finishes, type ```docker images``` to see thomasmerged listed as a repository. If you see it, you are good to go !
 
