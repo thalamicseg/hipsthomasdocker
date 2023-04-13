@@ -18,6 +18,10 @@ ADD ./origtemplate_mni.nii.gz /opt/thomas_new
 ADD ./imgtools.py /opt/thomas_new/libraries
 ADD ./ants_nonlinear.py /opt/thomas_new/libraries
 ADD ./remap_image.py /opt/thomas_new/libraries
+RUN chmod +x /opt/thomas_new/thomas* 
+RUN chmod +x /opt/thomas_new/hips* 
+RUN chmod +x /opt/thomas_new/*.py
+RUN chmod +x /opt/thomas_new/libraries/*.py
 ENV THOMAS_HOME="/opt/thomas_new"
 ENV PATH="/opt/thomas_new:$PATH"
 
