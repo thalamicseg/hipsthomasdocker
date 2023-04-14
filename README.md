@@ -54,11 +54,12 @@ This is a docker container for HIPS-THOMAS, a new modified pipeline for accurate
 The directories named **left** and **right** contain the outputs which are individual nuclei labels (e.g. 2-AV.nii.gz for anteroventral and so on), nonlinear warp files, and also the following files:
 - **thomas.nii.gz** is all labels fused into one file (same size as the cropped anatomical file)
 - **thomasfull.nii.gz** is also fused labels but same size as the input file (i.e. full size as opposed to cropped)
-- **nucVols.txt** contains the nuclei volumes in mm^3 
+- **nucleiVols.txt** contains the nuclei volumes in mm^3 
 - **regn.nii.gz** is the custom template registered to the input image. This file is critical for debugging. Make sure this file and cropped input file are well aligned. For the right side, do this comparison for crop_<input file> and regn.nii.gz inside the tempr directory as there is a flip operation performed for the right.
 - For right side, the labels are called **thomasr.nii.gz** and **thomasrfull.nii.gz**
-- **temp** and **tempr** directories contain intermediate step files which sometimes can help debugging esp for right side registration
+- **temp** and **tempr** directories contain intermediate step files which sometimes can help debugging esp for right side registration but can be safely deleted to save space
 - A reminder that outputs will be overwritten if run again in the same directory. So if you want to process multiple files, put them in separate directories and run a simple shell script to loop through all the folders. 
+- The nuclei are all cropped but can be uncropped using uncrop.py found here https://github.com/thalamicseg/thomas_new/blob/master/uncrop.py You will need the crop mask mask_inp.nii.gz which you will find in left and right folders for each side. Or you can extract the individual full labels from the thomasfull.nii.gz using mri_extract_label of Freesurfer like here https://surfer.nmr.mgh.harvard.edu/fswiki/mri_extract_label 
 
 ## Thalamic nuclei expansions and label definitions
 THOMAS outputs the mammillothalamic tract (14-MTT) and the eleven delineated nuclei grouped as follows (Note that 6-VLP is further split into 6_VLPv and 6_VLPd. 6_VLPv is roughly concordant with VIM used for targeting in DBS applications although differences seem to exist between Morel and Schaltenbrand atlases)-
