@@ -15,7 +15,7 @@ This is a docker container for HIPS-THOMAS, a new modified pipeline for accurate
 - To run HIPS-THOMAS, **each anatomical T1 or WMn MPRAGE file should be in a separate directory**. You can launch the container from the command line by running the following command inside the directory containing the T1.nii.gz file:
  ```docker run -v ${PWD}:${PWD} -w ${PWD} --user $(id -u):$(id -g) --rm -t anagrammarian/thomasmerged bash -c "hipsthomas_csh -i T1.nii.gz -t1" ```. Change the T1.nii.gz to your desired filename. 
 - For WMn/FGATIR, use the following command: ```docker run -v ${PWD}:${PWD} -w ${PWD} --user $(id -u):$(id -g) --rm -t anagrammarian/thomasmerged bash -c "hipsthomas_csh -i WMn.nii.gz" ```.
-- You can also use the two wrapper bash scripts thomaswmn and thomast1_hips. You can put them in ~/bin (and add ~/bin to your path to easily access it from anywhere or call ~/bin/thomaswmn or ~/bin/thomast1_hips ). Make sure the name of the container is anagrammarian/thomasmerged in the 2 scripts before running and also do a ```chmod +x thomas*``` to make the scripts executable prior to running (github seems to mess this up)
+- You can also use the two wrapper bash scripts thomaswmn and thomast1_hips. You can put them in ~/bin and add ~/bin to your path to easily access it or call ```~/bin/thomaswmn or ~/bin/thomast1_hips``` ). Make sure the name of the container is anagrammarian/thomasmerged in the 2 scripts before running and also do a ```chmod +x thomas*``` to make the scripts executable prior to running (github seems to mess this up)
 
 
 ## Installation instructions (for users who have installed the older thomas docker container)
@@ -36,14 +36,19 @@ This is a docker container for HIPS-THOMAS, a new modified pipeline for accurate
 - To run THOMAS, **each anatomical T1 or WMn MPRAGE file should be in a separate directory**. You can launch the container from the command line by running the following command inside the directory containing the T1.nii.gz file:
  ```docker run -v ${PWD}:${PWD} -w ${PWD} --user $(id -u):$(id -g) --rm -t thomasmerged bash -c "hipsthomas_csh -i T1.nii.gz -t1" ```. Change the T1.nii.gz to your desired filename. 
 - For WMn/FGATIR, use the following command: ```docker run -v ${PWD}:${PWD} -w ${PWD} --user $(id -u):$(id -g) --rm -t thomasmerged bash -c "hipsthomas_csh -i WMn.nii.gz" ```.
--  Two wrapper bash scripts thomaswmn and thomast1_hips are also supplied. You can put them in ~/bin (and add ~/bin to your path to easily access it from anywhere or call ~/bin/thomaswmn or ~/bin/thomast1_hips ). Do a ```chmod +x thomas*``` to make the scripts executable prior to running (github seems to mess this up)
+-  Two bash wrapper scripts thomaswmn and thomast1_hips are also supplied. You can put them in ~/bin and add ~/bin to your path to easily access it or call ```~/bin/thomaswmn or ~/bin/thomast1_hips```). Do a ```chmod +x thomas*``` to make the scripts executable prior to running (github seems to mess this up)
 
-
+## Common issues
+- 7T MP2RAGE scaled data sometimes is in -0.5 to 0.5 scaling. Scale it up to a big integer before using THOMAS. You can scale this using ```fslmaths T1.nii.gz -mul -16384 T1s.nii.gz``` 
+- Occasionally, the name of the input file can cause some issues if it starts with a number. Avoid using numbers as starting for your filenames
+- Wrapper scripts need to be exec permissions or won't run. Do a ```chmod +x thomas*``` on those before running
+- If using the second option i.e. building the container locally, make sure you execute the cat command to assemble the origtemplate_mni.nii.gz from its 8 parts before running the ```docker build``` command.
+- Docker needs ~90Gb free space to install properly via building. Make sure the partitions have enough free space.
 
 ## Running the provided test data 
 -  First extract the test data by running ```tar -xvzf example.tgz``` inside a clean test directory
--  Run them as described in the Usage sections above
--  If you downloaded HIPS-THOMAS from dockerhub, then change thomasmerged to anagrammarian/thomasmerged in the wrapper scripts (if using, that)
+-  Run as described in the Usage sections above
+-  If you downloaded HIPS-THOMAS from dockerhub, then change thomasmerged to anagrammarian/thomasmerged in the wrapper scripts
 
 ## Outputs
 The directories named **left** and **right** contain the outputs which are individual nuclei labels (e.g. 2-AV.nii.gz for anteroventral and so on), nonlinear warp files, and also the following files:
@@ -70,7 +75,7 @@ The original Neuroimage paper on THOMAS can be found here https://pubmed.ncbi.nl
 	Su J, Thomas FT, Kasoff WS, Tourdias T, Choi EY, Rutt BK, Saranathan M. Thalamus Optimized Multi-atlas Segmentation (THOMAS):
 	fast, fully automated segmentation of thalamic nuclei from anatomical MRI. _NeuroImage_; 194:272-282 (2019)
 
-HIPS-THOMAS is under review in Scientific Methods and the citation will be available once it is accepted.
+HIPS-THOMAS is under review in Scientific Methods and the citation will be available once it is accepted. Arxiv preprint coming soon !
 
 
 ## Contact
