@@ -42,11 +42,8 @@ This is a docker container for HIPS-THOMAS, a new modified pipeline for accurate
 
 ## Running the provided test data 
 -  First extract the test data by running ```tar -xvzf example.tgz``` inside a clean test directory
--  If using wrapper scripts, move thomaswmn and thomast1_hips from inside thomasdocker to ~/bin
--  For the WMn MPRAGE data, you can run ```docker run -v ${PWD}:${PWD} -w ${PWD} --user $(id -u):$(id -g) --rm -t thomasmerged bash -c "hipsthomas_csh -i WMn.nii.gz" ```  or ```~/bin/thomaswmn WMn.nii.gz``` 
--  For the T1 MPRAGE data, you can run ```docker run -v ${PWD}:${PWD} -w ${PWD} --user $(id -u):$(id -g) --rm -t thomasmerged bash -c "hipsthomas_csh -i T1.nii.gz -t1" ``` or ```~/bin/thomast1_hips T1.nii.gz```
--  Note: you need to create separate subdirectories ideally outside thomasdocker to run WMn and T1 test data or they will get overwritten
--  If you downloaded HIPS-THOMAS from dockerhub, then change thomasmerged to anagrammarian/thomasmerged
+-  Run them as described in the Usage sections above
+-  If you downloaded HIPS-THOMAS from dockerhub, then change thomasmerged to anagrammarian/thomasmerged in the wrapper scripts (if using, that)
 
 ## Outputs
 The directories named **left** and **right** contain the outputs which are individual nuclei labels (e.g. 2-AV.nii.gz for anteroventral and so on), nonlinear warp files, and also the following files:
