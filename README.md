@@ -39,8 +39,8 @@ This is a docker container for HIPS-THOMAS, a new modified pipeline for accurate
 -  Two bash wrapper scripts thomaswmn and thomast1_hips are also supplied. You can put them in ~/bin and add ~/bin to your path to easily access it or call ```~/bin/thomaswmn or ~/bin/thomast1_hips```). Do a ```chmod +x thomas*``` to make the scripts executable prior to running (github seems to mess this up)
 
 ## Common issues
-- 7T MP2RAGE scaled data sometimes is in -0.5 to 0.5 scaling. Scale it up to a big integer before using THOMAS. You can scale this using ```fslmaths T1.nii.gz -mul -16384 T1s.nii.gz``` 
-- Occasionally, the name of the input file can cause some issues if it starts with a number. Avoid using numbers as starting for your filenames
+- 7T MP2RAGE ratio normalized images is scaled from -0.5 to 0.5 sometimes. In that case, scale it up to a big integer before using THOMAS. You can scale this using ```fslmaths T1.nii.gz -mul -16384 T1s.nii.gz``` for example.
+- Occasionally, the name of the input file can cause some issues, if it starts with a **number**. Avoid using numbers as starting for your filenames
 - Wrapper scripts need to be exec permissions or won't run. Do a ```chmod +x thomas*``` on those before running
 - If using the second option i.e. building the container locally, make sure you execute the cat command to assemble the origtemplate_mni.nii.gz from its 8 parts before running the ```docker build``` command.
 - Docker needs ~90Gb free space to install properly via building. Make sure the partitions have enough free space.
