@@ -71,12 +71,13 @@ THOMAS outputs the mammillothalamic tract (14-MTT) and the eleven delineated nuc
 
 
 ## Citation
+
+HIPS-THOMAS is currently under review in Scientific Methods. The arXiv preprint can be found here http://arxiv.org/abs/2304.07167. 
+
 The original Neuroimage paper on THOMAS can be found here https://pubmed.ncbi.nlm.nih.gov/30894331/
 
-	Su J, Thomas FT, Kasoff WS, Tourdias T, Choi EY, Rutt BK, Saranathan M. Thalamus Optimized Multi-atlas Segmentation (THOMAS):
-	fast, fully automated segmentation of thalamic nuclei from anatomical MRI. _NeuroImage_; 194:272-282 (2019)
+	Su J, Thomas FT, Kasoff WS, Tourdias T, Choi EY, Rutt BK, Saranathan M. Robust thalamic nuclei segmentation from T1-weighted MRI. *NeuroImage*; 194:272-282 (2019)
 
-HIPS-THOMAS is under review in Scientific Methods and the citation will be available once it is accepted. Arxiv preprint coming soon !
 
 
 ## Contact
