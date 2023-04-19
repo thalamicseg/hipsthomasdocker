@@ -11,6 +11,10 @@ This is a docker container for HIPS-THOMAS, a new modified pipeline for accurate
 
 - When the long 41Gb download finishes, type ```docker images``` to check if anagrammarian/thomasmerged is listed. You are good to go. 
 
+- To get the example files, colortables, wrapper scripts etc, download the HIPS-THOMAS files using ```git clone https://github.com/thalamicseg/hipsthomasdocker.git``` which will create a **hipsthomasdocker** directory
+
+- You can copy the wrapper scripts to ~/bin, example.tgz to ~/testrun and so on.
+
 ##  Usage
 - To run HIPS-THOMAS, **each anatomical T1 or WMn MPRAGE file should be in a separate directory**. You can launch the container from the command line by running the following command inside the directory containing the T1.nii.gz file:
  ```docker run -v ${PWD}:${PWD} -w ${PWD} --user $(id -u):$(id -g) --rm -t anagrammarian/thomasmerged bash -c "hipsthomas_csh -i T1.nii.gz -t1" ```. Change the T1.nii.gz to your desired filename. 
