@@ -26,7 +26,7 @@ This is a docker container for HIPS-THOMAS, a new modified pipeline for accurate
 
 ## Common issues
 - The first cropping step fails in a lot of older patients due to presence of neck tissue. If you are seeing failures (bring up crop_T1.nii.gz from left and the central slice should have both thalami), try running bet and run thomas on brain extracted data- bet input output -B -R works where input is your T1 image. bet is available inside the docker container which can be entered using ```docker run -v ${PWD}:${PWD} -w ${PWD} --rm -it thomasmerged``` and you can simply run bet here or write a batch script to bet all data
-- When dealing with large ventricles (such as ADNI and other older subjects data), you can use the big crop option. Modify thomast1_hips to add a -B to the commandline argument after -t1.
+- When dealing with large ventricles (such as ADNI and other older subjects data), you can use the big crop option. Modify thomast1_hips to add a -B to the commandline argument after -t1 ```docker run -v ${PWD}:${PWD} -w ${PWD} --user $(id -u):$(id -g) --rm -t anagrammarian/thomasmerged bash -c "hipsthomas_csh -i $1 -t1 -B"```
 - 7T MP2RAGE ratio normalized images is scaled from -0.5 to 0.5 sometimes. In that case, scale it up to a big integer before using THOMAS. You can scale this using ```fslmaths T1.nii.gz -mul -16384 T1s.nii.gz``` for example.
 - Occasionally, the name of the input file can cause some issues, if it starts with a **number**. Avoid using numbers as starting for your filenames
 - Wrapper scripts need to have exec permissions or won't run. Do a ```chmod +x thomas*``` on those before running
