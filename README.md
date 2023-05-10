@@ -60,7 +60,7 @@ A colortable file (CustomAtlas.ctbl) for 3D Slicer and an FSL compatible lookup 
 
 ## Future enhancements (watch this space, coming soon !)
 - Batch script which runs on all folders/files and creates a volume CSV file for left and right hemispheres
-- Quality control ![qcexample](https://github.com/thalamicseg/hipsthomasdocker/blob/main/qcexample.png)
+- Quality control ![qc-example](https://github.com/thalamicseg/hipsthomasdocker/blob/main/qcexample.png)
 
 
 ## Citation
