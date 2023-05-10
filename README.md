@@ -14,7 +14,6 @@ This is a docker container for HIPS-THOMAS, a new modified pipeline for accurate
 - To get the example files, colortables, wrapper scripts etc, download the HIPS-THOMAS files using ```git clone https://github.com/thalamicseg/hipsthomasdocker.git``` which will create a **hipsthomasdocker** directory
 
 - Copy the wrapper scripts thomaswmn and thomast1_hips to ~/bin and do a ```chmod +x thomas*``` to make the scripts executable prior to running
-- If you downloaded HIPS-THOMAS from dockerhub, make sure **thomasmerged** is **anagrammarian/thomasmerged** in the wrapper scripts !
 - To install a patch to a previous thomas docker container, see the 1.0 branch of hipsthomasdocker
 
 
