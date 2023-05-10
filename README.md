@@ -58,6 +58,10 @@ THOMAS outputs the mammillothalamic tract (14-MTT) and the eleven delineated nuc
 	(d) anterior group: anteroventral (2-AV)
 A colortable file (CustomAtlas.ctbl) for 3D Slicer and an FSL compatible lookup table (Thomas.lut) is also provided. When you use these, Slicer or fsleyes will label appropriately.
 
+## Future enhancements (watch this space, coming soon !)
+- Batch script which runs on all folders/files and creates a volume CSV file for left and right hemispheres
+- Quality control ![qcexample](https://github.com/thalamicseg/hipsthomasdocker/blob/main/qcexample.JPG)
+
 
 ## Citation
 
