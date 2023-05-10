@@ -14,7 +14,8 @@ This is a docker container for HIPS-THOMAS, a new modified pipeline for accurate
 - To get the example files, colortables, wrapper scripts etc, download the HIPS-THOMAS files using ```git clone https://github.com/thalamicseg/hipsthomasdocker.git``` which will create a **hipsthomasdocker** directory
 
 - Copy the wrapper scripts thomaswmn and thomast1_hips to ~/bin and do a ```chmod +x thomas*``` to make the scripts executable prior to running
-- If you downloaded HIPS-THOMAS from dockerhub, then change **thomasmerged** to **anagrammarian/thomasmerged** in the wrapper scripts !
+- If you downloaded HIPS-THOMAS from dockerhub, make sure **thomasmerged** is **anagrammarian/thomasmerged** in the wrapper scripts !
+- To install a patch to a previous thomas docker container, see the 1.0 branch of hipsthomasdocker
 
 
 ##  Usage
@@ -54,6 +55,7 @@ THOMAS outputs the mammillothalamic tract (14-MTT) and the eleven delineated nuc
 	(b) posterior group: medial geniculate nucleus (10-MGN), lateral geniculate nucleus (9-LGN),  pulvinar (8-Pul),
 	(c) lateral group: ventral posterolateral (7-VPL), ventral lateral posterior (6-VLp), ventral lateral anterior (5-VLa), ventral anterior nucleus (4-VA)
 	(d) anterior group: anteroventral (2-AV)
+A colortable file (CustomAtlas.ctbl) for 3D Slicer and an FSL compatible lookup table (Thomas.lut) is also provided. When you use these, Slicer or fsleyes will label appropriately.
 
 
 ## Citation
