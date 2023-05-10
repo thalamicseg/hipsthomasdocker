@@ -35,9 +35,8 @@ This is a docker container for HIPS-THOMAS, a new modified pipeline for accurate
 - Wrapper scripts need to have exec permissions or won't run. Do a ```chmod +x thomas*``` on those before running
 - Make sure ~/bin is in your PATH or call the wrappers explicitly like ~/bin/thomast1_hips 
 - Docker needs ~90Gb free space to install properly via building. Make sure the partitions have enough free space
+- thomas has to be run in the directory where the T1 or WMn file is located and cannot accept path arguments in filename. This will be fixed in future versions D.V.
 
-
-## Running the provided test data 
 
 ## Outputs
 The directories named **left** and **right** contain the outputs which are individual nuclei labels (e.g. 2-AV.nii.gz for anteroventral and so on), nonlinear warp files, and also the following files:
