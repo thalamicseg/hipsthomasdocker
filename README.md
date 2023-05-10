@@ -4,7 +4,7 @@ This is a docker container for HIPS-THOMAS, a new modified pipeline for accurate
 ![HIPS-THOMAS workflow](https://github.com/thalamicseg/hipsthomasdocker/blob/main/hipsthomas.JPG)
 
 
-## Installation instructions (Method 1: for users who have **NOT** installed thomas docker container previously)
+## Installation instructions 
 - Make sure docker is installed already on your machine or install it from here https://docs.docker.com/get-docker/.  
 
 - Download the HIPS-THOMAS container from dockerhub ```docker pull anagrammarian/thomasmerged```
@@ -23,29 +23,6 @@ This is a docker container for HIPS-THOMAS, a new modified pipeline for accurate
  ```docker run -v ${PWD}:${PWD} -w ${PWD} --user $(id -u):$(id -g) --rm -t anagrammarian/thomasmerged bash -c "hipsthomas_csh -i T1.nii.gz -t1" ```. Change the T1.nii.gz to your desired filename. 
 - For WMn/FGATIR files, use the following command: ```docker run -v ${PWD}:${PWD} -w ${PWD} --user $(id -u):$(id -g) --rm -t anagrammarian/thomasmerged bash -c "hipsthomas_csh -i WMn.nii.gz" ```.
 - You can also use the two wrapper bash scripts thomaswmn and thomast1_hips (see last 2 steps of Install)
-
-## Installation instructions (Method 2: for users who have installed the older thomas docker container)
-
-- If you have already built a THOMAS container or downloaded it from dockerhub, then the following steps will save you a lot of time as you are downloading 200Mb vs. 41Gb ! 
-
-- **Step 1**: Download the HIPS-THOMAS files using ```git clone https://github.com/thalamicseg/hipsthomasdocker.git``` which will create a **hipsthomasdocker** directory
-
-- Note: if you had previously built the THOMAS docker directly from a Dockerfile instead of downloading from dockerhub, use thomas instead of anagrammarian/thomas in the Dockerfile line which says FROM. If you are unsure, run ``docker images`` to see if the image name is thomas or anagrammarian/thomas
-
-- **Step 2**: Run the following command inside the hipsthomasdocker directory to combine the pieces of a large template file (github only allows 25Mb) ```cat origtemplate_mni.nii.gz.parta* > origtemplate_mni.nii.gz```
-
-- **Step 3**: Run ```docker build -t thomasmerged .``` inside the hipsthomasdocker directory to create a new container named thomasmerged. Note the period at the end of the command which is critical.
-
-- When the build finishes in a few seconds, type ```docker images``` to see thomasmerged listed as a repository. If you see it, you are good to go !
-
-- Copy the wrapper scripts thomaswmn and thomast1_hips to ~/bin and do a ```chmod +x thomas*``` to make the scripts executable prior to running
-  
-## Usage
-- To use the provided example files, copy example.tgz from hipsthomasdocker to ~/testdata and run ```tar -xvzf example.tgz``` inside ~/testdata
-- To run THOMAS, **each anatomical T1 or WMn MPRAGE file should be in a separate directory**. You can launch the container from the command line by running the following command inside the directory containing the T1.nii.gz file:
- ```docker run -v ${PWD}:${PWD} -w ${PWD} --user $(id -u):$(id -g) --rm -t thomasmerged bash -c "hipsthomas_csh -i T1.nii.gz -t1" ```. Change the T1.nii.gz to your desired filename. 
-- For WMn/FGATIR, use the following command: ```docker run -v ${PWD}:${PWD} -w ${PWD} --user $(id -u):$(id -g) --rm -t thomasmerged bash -c "hipsthomas_csh -i WMn.nii.gz" ```.
--  You can also use the two wrapper bash scripts thomaswmn and thomast1_hips (see penultimate step of Install above)
 
 ## Common issues
 - The first cropping step fails in a lot of older patients due to presence of neck tissue. If you are seeing failures (bring up crop_T1.nii.gz from left and the central slice should have both thalami), try running bet and run thomas on brain extracted data- bet input output -B -R works where input is your T1 image. bet is available inside the docker container which can be entered using ```docker run -v ${PWD}:${PWD} -w ${PWD} --rm -it thomasmerged``` and you can simply run bet here or write a batch script to bet all data
