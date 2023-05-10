@@ -26,16 +26,16 @@ This is a docker container for HIPS-THOMAS, a new modified pipeline for accurate
 
 ## Common issues
 - The first cropping step of THOMAS occasionally fails in older patients due to presence of neck tissue. If you are seeing failures (abormally small or large values of 1-THALAMUS typically 3000-6000 is normal, anything outside is suspect, any 0s in nuclei typically 2-AV or 9-LGN or 10-MGN are also indicative of crop failures albeit more subtle asymmetric crop than complete failure) view crop_T1.nii.gz from left and the central slice should have both thalami.
-- In case of a crop failure, try running _bet_ and the run thomas on brain extracted data. The bet command we recommend is ```bet input output -B -R`` works where input is your T1 image. Note that _bet_ is available inside the docker container which can be entered using ```docker run -v ${PWD}:${PWD} -w ${PWD} --rm -it thomasmerged``` and you can simply run bet here or write a batch script to bet all data if bet is not installed locally
+
+- In case of a crop failure, try running ```bet``` and then run thomas on brain extracted data. The bet command we recommend is ```bet input output -B -R`` where input is your T1 image. Note that ```bet``` is available inside the docker container which can be entered using ```docker run -v ${PWD}:${PWD} -w ${PWD} --rm -it thomasmerged``` and you can simply run bet here on a case by case basis or write a batch script. This is useful if bet is not installed locally
 - When dealing with large ventricles (such as ADNI and other older subjects data), you can use the big crop option. Modify thomast1_hips to add a -B to the commandline argument after -t1 ```docker run -v ${PWD}:${PWD} -w ${PWD} --user $(id -u):$(id -g) --rm -t anagrammarian/thomasmerged bash -c "hipsthomas_csh -i $1 -t1 -B"```
 - 7T MP2RAGE ratio normalized images is scaled from -0.5 to 0.5 sometimes. In that case, scale it up to a big integer before using THOMAS. You can scale this using ```fslmaths T1.nii.gz -mul -16384 T1s.nii.gz``` for example.
 - Occasionally, the name of the input file can cause some issues, if it starts with a **number**. Avoid using numbers as starting for your filenames
 - Denoising the whole image can help if very noise. We recommend ```DenoiseImage 3 -i input -o output -n Rician``` of ANTs also accessible within the container (see point 2 for bet above for access)
 - Wrapper scripts need to have exec permissions or won't run. Do a ```chmod +x thomas*``` on those before running
 - Make sure ~/bin is in your PATH or call the wrappers explicitly like ~/bin/thomast1_hips 
-- If using the second option i.e. building the container locally, make sure you execute the cat command to assemble the origtemplate_mni.nii.gz from its 8 parts before running the ```docker build``` command.
 - Docker needs ~90Gb free space to install properly via building. Make sure the partitions have enough free space
-- If you pulled HIPS-THOMAS directly from dockerhub (method 1), then change thomasmerged to anagrammarian/thomasmerged in the wrapper scripts
+
 
 ## Running the provided test data 
 
