@@ -3,7 +3,7 @@
 if [ $# -lt 3 ]
 then
 echo "running thomasmerged docker on $1"
-docker run -v ${PWD}:${PWD} -w ${PWD} --user $(id -u):$(id -g) --rm -t anagrammarian/thomasmerged bash -c "hipsthomas_csh -i $1 -t1"
+docker run -v ${PWD}:${PWD} -w ${PWD} --user $(id -u):$(id -g) --rm -t anagrammarian/thomasmerged bash -c "hipsthomas_csh -i $1 -t1 -big"
 else
 echo "Usage: thomast1_hips T1MPRAGE/SPGR filename"
 echo "please use thomaswmn for WMn MPRAGE/FGATIR files"
