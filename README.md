@@ -4,7 +4,7 @@ This is a docker container for HIPS-THOMAS, a new modified pipeline for accurate
 ![HIPS-THOMAS workflow](https://github.com/thalamicseg/hipsthomasdocker/blob/main/hipsthomas.JPG)
 
 
-## Installation instructions 
+## Installation instructions (see key note below for MAC)
 - Make sure docker is installed already on your machine or install it from here https://docs.docker.com/get-docker/.  
 
 - Download the HIPS-THOMAS container from dockerhub ```docker pull anagrammarian/thomasmerged```
@@ -15,7 +15,17 @@ This is a docker container for HIPS-THOMAS, a new modified pipeline for accurate
 
 - Copy the wrapper scripts thomaswmn and thomast1_hips to ~/bin and do a ```chmod +x thomas*``` to make the scripts executable prior to running
 - If you already have a thomas docker container and want to install a patch (300Mb vs 41Gb so much faster), see the 1.0 branch of hipsthomasdocker but is not recommended as that branch will not be maintained
+- **MAC USERS TAKE NOTE** Apple Silicon is not compatible with a lot of docker containers. So follow these steps-
+  
+	-Install Docker Desktop for Apple Silicon
+	
+	-Enable Rosetta in the operating system
+	
+	-Enable Rosetta in Docker Desktop
+	
+	-Enabling Rosetta in Docker Desktop requires OS 13 Ventura or greater
 
+This will significantly reduce the run time (which in some cases does not finish). Intel chip based Macs should work fine but this needs to be validated more thoroughly. We have anecodal evidence of no issues with Macs with Intel based processors.  Thanks to **Dianne Patterson** for investigating and finding this fix.
 
 ##  Usage
 - To use the provided example files, copy example.tgz from hipsthomasdocker to ~/testdata and run ```tar -xvzf example.tgz``` inside ~/testdata
