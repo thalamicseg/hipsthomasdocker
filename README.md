@@ -34,7 +34,7 @@ This will significantly reduce the run time (which in some cases does not finish
 - For WMn/FGATIR files, use the following command: ```docker run -v ${PWD}:${PWD} -w ${PWD} --user $(id -u):$(id -g) --rm -t anagrammarian/thomasmerged bash -c "hipsthomas_csh -i WMn.nii.gz" ```.
 - You can also use the two wrapper bash scripts thomaswmn and thomast1_hips (see last 2 steps of Install)
 - Note that you cannot use thomast1_hips for WMn/FGATIR or thomaswmn for T1.
-- Note also the -t1 and -big arguments for **T1 alone**. THe -big helps with patients with large ventricles (older population). The -c triggers the HIPS WMn synthesis.
+- Note also the -t1 and -big arguments for **T1 alone**. THe -big helps with patients with large ventricles (older population). The -t1 triggers the HIPS WMn synthesis.
 
 ## Common issues
 - The first cropping step of THOMAS occasionally fails in older patients due to presence of neck tissue. If you are seeing failures (abormally small or large values of 1-THALAMUS typically 3000-6000 is normal, anything outside is suspect, any 0s in nuclei typically 2-AV or 9-LGN or 10-MGN are also indicative of crop failures albeit more subtle asymmetric crop than complete failure) view crop_T1.nii.gz from left and the central slice should have both thalami.
