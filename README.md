@@ -30,9 +30,11 @@ This will significantly reduce the run time (which in some cases does not finish
 ##  Usage
 - To use the provided example files, copy example.tgz from hipsthomasdocker to ~/testdata and run ```tar -xvzf example.tgz``` inside ~/testdata
 - To run HIPS-THOMAS, **each anatomical T1 or WMn MPRAGE file should be in a separate directory**. You can launch the container from the command line by running the following command inside the directory containing the T1.nii.gz file:
- ```docker run -v ${PWD}:${PWD} -w ${PWD} --user $(id -u):$(id -g) --rm -t anagrammarian/thomasmerged bash -c "hipsthomas_csh -i T1.nii.gz -t1" ```. Change the T1.nii.gz to your desired filename. 
+ ```docker run -v ${PWD}:${PWD} -w ${PWD} --user $(id -u):$(id -g) --rm -t anagrammarian/thomasmerged bash -c "hipsthomas_csh -i T1.nii.gz -t1 -big" ```. Change the T1.nii.gz to your desired filename. 
 - For WMn/FGATIR files, use the following command: ```docker run -v ${PWD}:${PWD} -w ${PWD} --user $(id -u):$(id -g) --rm -t anagrammarian/thomasmerged bash -c "hipsthomas_csh -i WMn.nii.gz" ```.
 - You can also use the two wrapper bash scripts thomaswmn and thomast1_hips (see last 2 steps of Install)
+- Note that you cannot use thomast1_hips for WMn/FGATIR or thomaswmn for T1.
+- Note also the -c and -big arguments for **T1 alone**. THe -big helps with patients with large ventricles (older population). The -c triggers the HIPS WMn synthesis.
 
 ## Common issues
 - The first cropping step of THOMAS occasionally fails in older patients due to presence of neck tissue. If you are seeing failures (abormally small or large values of 1-THALAMUS typically 3000-6000 is normal, anything outside is suspect, any 0s in nuclei typically 2-AV or 9-LGN or 10-MGN are also indicative of crop failures albeit more subtle asymmetric crop than complete failure) view crop_T1.nii.gz from left and the central slice should have both thalami.
