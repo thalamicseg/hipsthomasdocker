@@ -4,7 +4,7 @@ This is a docker container for HIPS-THOMAS, a new modified pipeline for accurate
 ![HIPS-THOMAS workflow](https://github.com/thalamicseg/hipsthomasdocker/blob/main/hipsthomas.JPG)
 
 
-## Installation instructions (see key note below for MAC)
+## Installation instructions (see key notes below for MAC and for SINGULARITY)
 - Make sure docker is installed already on your machine or install it from here https://docs.docker.com/get-docker/.  
 
 - Download the HIPS-THOMAS container from dockerhub ```docker pull anagrammarian/thomasmerged```
@@ -26,6 +26,14 @@ This is a docker container for HIPS-THOMAS, a new modified pipeline for accurate
 	-Enabling Rosetta in Docker Desktop requires OS 13 Ventura or greater
 
 This will significantly reduce the run time (which in some cases does not finish). Intel chip based Macs should work fine but this needs to be validated more thoroughly. We have anecodal evidence of no issues with Macs with Intel based processors.  Thanks to **Dianne Patterson** for investigating and finding this fix.
+
+## SINGULARITY
+- You can directly pull from dockerhub and save as an sif file
+- First install apptainer from here https://apptainer.org/docs/user/main/quick_start.html
+- Then run  ```singularity pull thomas.sif docker://anagrammarian/thomasmerged```
+- You need to tweak the calls slightly from docker usage below but briefly for T1 run the following:
+  ```singularity run -B ${PWD}:${PWD} -W ${PWD} -u --cleanenv /path/to/thomas.sif bash -c "hipsthomas_csh -i T1.nii.gz -t1 -big" ```
+- I will upload wrappers shortly (Dec 13 2023)
 
 ##  Usage
 - To use the provided example files, copy example.tgz from hipsthomasdocker to ~/testdata and run ```tar -xvzf example.tgz``` inside ~/testdata
