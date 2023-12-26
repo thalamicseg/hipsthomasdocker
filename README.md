@@ -49,7 +49,7 @@ This will significantly reduce the run time (which in some cases does not finish
 ## Singularity usage
 - You need to tweak the calls slightly from docker usage above but briefly for T1 run the following:
 - Change the /path/to to path you have stored your thomas.sif file e.g. /home/username/bin
-  ```singularity run -B ${PWD}:${PWD} -W ${PWD} -u --cleanenv /path/to/thomas.sif bash -c "hipsthomas_csh -i T1.nii.gz -t1 -big" ```
+- For T1,  ```singularity run -B ${PWD}:${PWD} -W ${PWD} -u --cleanenv /path/to/thomas.sif bash -c "hipsthomas_csh -i T1.nii.gz -t1 -big" ```
 - For WMn/FGATIR,  ```singularity run -B ${PWD}:${PWD} -W ${PWD} -u --cleanenv /path/to/thomas.sif bash -c "hipsthomas_csh -i WMn.nii.gz" ```
 - I will upload wrappers shortly (Dec 13 2023)
 
