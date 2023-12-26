@@ -1,4 +1,4 @@
-# HIPS-THOMAS docker version
+# HIPS-THOMAS docker version (Update 12/26/2023- a new container was uploaded to dockerhub ~ Dec 11 2023 which fixes some cropping errors for low quality T1 images. Please erase and redownload the docker image to use that)
 This is a docker container for HIPS-THOMAS, a new modified pipeline for accurate segmentation of T1w (SPGR,MPRAGE) data based on THOMAS. Note that HIPS-THOMAS performs much better than THOMAS for T1w data as it synthesizes WMn-like images from T1 prior to running THOMAS. The WMn-MPRAGE segmentation is unchanged and this container can be used on both T1w and WMn data by choosing the right wrapper script. The HIPS-THOMAS workflow is shown below:-
 
 ![HIPS-THOMAS workflow](https://github.com/thalamicseg/hipsthomasdocker/blob/main/hipsthomas.JPG)
