@@ -35,8 +35,10 @@ This will significantly reduce the run time (which in some cases does not finish
 - You can directly pull from dockerhub and save as an sif file
 - First install apptainer from here https://apptainer.org/docs/user/main/quick_start.html
 - Then run  ```singularity pull thomas.sif docker://anagrammarian/thomasmerged```
+- You can store the thomas.sif in your favourite location say /home/username/bin along with your scripts
 - You need to tweak the calls slightly from docker usage below but briefly for T1 run the following:
   ```singularity run -B ${PWD}:${PWD} -W ${PWD} -u --cleanenv /path/to/thomas.sif bash -c "hipsthomas_csh -i T1.nii.gz -t1 -big" ```
+- For WMn/FGATIR,  ```singularity run -B ${PWD}:${PWD} -W ${PWD} -u --cleanenv /path/to/thomas.sif bash -c "hipsthomas_csh -i WMn.nii.gz" ```
 - I will upload wrappers shortly (Dec 13 2023)
 
 ##  Usage
