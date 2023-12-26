@@ -35,13 +35,9 @@ This will significantly reduce the run time (which in some cases does not finish
 - You can directly pull from dockerhub and save as an sif file
 - First install apptainer from here https://apptainer.org/docs/user/main/quick_start.html
 - Then run  ```singularity pull thomas.sif docker://anagrammarian/thomasmerged```
-- You can store the thomas.sif in your favourite location say /home/username/bin along with your scripts
-- You need to tweak the calls slightly from docker usage below but briefly for T1 run the following:
-  ```singularity run -B ${PWD}:${PWD} -W ${PWD} -u --cleanenv /path/to/thomas.sif bash -c "hipsthomas_csh -i T1.nii.gz -t1 -big" ```
-- For WMn/FGATIR,  ```singularity run -B ${PWD}:${PWD} -W ${PWD} -u --cleanenv /path/to/thomas.sif bash -c "hipsthomas_csh -i WMn.nii.gz" ```
-- I will upload wrappers shortly (Dec 13 2023)
+- You can store the thomas.sif in your favourite location say /home/username/bin along with your scripts. Note that this path has to be specified while using the singualrity (see usage below Docker usage)
 
-##  Usage
+##  Docker usage
 - To use the provided example files, copy example.tgz from hipsthomasdocker to ~/testdata and run ```tar -xvzf example.tgz``` inside ~/testdata
 - To run HIPS-THOMAS, **each anatomical T1 or WMn MPRAGE file should be in a separate directory**. You can launch the container from the command line by running the following command inside the directory containing the T1.nii.gz file:
  ```docker run -v ${PWD}:${PWD} -w ${PWD} --user $(id -u):$(id -g) --rm -t anagrammarian/thomasmerged bash -c "hipsthomas_csh -i T1.nii.gz -t1 -big" ```. Change the T1.nii.gz to your desired filename. 
@@ -49,6 +45,13 @@ This will significantly reduce the run time (which in some cases does not finish
 - You can also use the two wrapper bash scripts thomaswmn and thomast1_hips (see last 2 steps of Install)
 - Note that you cannot use thomast1_hips for WMn/FGATIR or thomaswmn for T1.
 - Note also the -t1 and -big arguments for **T1 alone**. THe -big helps with patients with large ventricles (older population). The -t1 triggers the HIPS WMn synthesis.
+
+## Singularity usage
+- You need to tweak the calls slightly from docker usage above but briefly for T1 run the following:
+- Change the /path/to to path you have stored your thomas.sif file e.g. /home/username/bin
+  ```singularity run -B ${PWD}:${PWD} -W ${PWD} -u --cleanenv /path/to/thomas.sif bash -c "hipsthomas_csh -i T1.nii.gz -t1 -big" ```
+- For WMn/FGATIR,  ```singularity run -B ${PWD}:${PWD} -W ${PWD} -u --cleanenv /path/to/thomas.sif bash -c "hipsthomas_csh -i WMn.nii.gz" ```
+- I will upload wrappers shortly (Dec 13 2023)
 
 ## Common issues
 - The first cropping step of THOMAS occasionally fails in older patients due to presence of neck tissue. If you are seeing failures (abormally small or large values of 1-THALAMUS typically 3000-6000 is normal, anything outside is suspect, any 0s in nuclei typically 2-AV or 9-LGN or 10-MGN are also indicative of crop failures albeit more subtle asymmetric crop than complete failure) view crop_T1.nii.gz from left and the central slice should have both thalami.
