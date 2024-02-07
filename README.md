@@ -93,7 +93,7 @@ A colortable file (CustomAtlas.ctbl) for 3D Slicer and an FSL compatible lookup 
 
 ## Citation
 
-HIPS-THOMAS is currently under review in Scientific Methods. The arXiv preprint can be found here http://arxiv.org/abs/2304.07167. 
+HIPS-THOMAS is currently under review in Brain Structure and Function. The arXiv preprint can be found here [https://www.medrxiv.org/content/10.1101/2024.01.30.24301606v1]
 
 The original Neuroimage paper on THOMAS can be found here https://pubmed.ncbi.nlm.nih.gov/30894331/
 
