@@ -93,7 +93,9 @@ A colortable file (CustomAtlas.ctbl) for 3D Slicer and an FSL compatible lookup 
 
 ## Citation
 
-HIPS-THOMAS is in press and will be published soon in _Brain Structure and Function_. The medRxiv preprint can be found here [https://www.medrxiv.org/content/10.1101/2024.01.30.24301606v1]
+HIPS-THOMAS is in press in Brain Structure and Function. The medRxiv preprint can be found here [https://www.medrxiv.org/content/10.1101/2024.01.30.24301606v1]
+
+	Vidal JP, Danet L, Péran P, Pariente J, Bach Cuadra M, Zahr NM, Barbeau EJ, Saranathan M. Robust thalamic nuclei segmentation from T1-weighted MRI using polynomial intensity transformation. *Brain Structure and Function*; 2024 
 
 The original Neuroimage paper on THOMAS can be found here https://pubmed.ncbi.nlm.nih.gov/30894331/
 
