@@ -18,10 +18,10 @@ The HIPS-THOMAS workflow is shown below:-
 - To get the example files, colortables, wrapper scripts etc, download the HIPS-THOMAS files using ```git clone https://github.com/thalamicseg/hipsthomasdocker.git``` which will create a **hipsthomasdocker** directory
 
 - Copy the wrapper scripts thomaswmn and thomast1_hips to ~/bin and do a ```chmod +x thomas*``` to make the scripts executable prior to running
-- If you already have a thomas docker container and want to install a patch (300Mb vs 41Gb so much faster), see the 1.0 branch of hipsthomasdocker but is not recommended as that branch will not be maintained
+- If you already have a thomas docker container and want to install a patch (300MB vs 41GB so much faster), see the 1.0 branch of hipsthomasdocker but is not recommended as that branch will not be maintained
 - **MAC USERS TAKE NOTE** Apple Silicon is not compatible with a lot of docker containers. So follow these steps-
   
-	-Install Docker Desktop for Apple Silicon (make sure the space allocated for docker is 80Gb or so as the container is 41Gb)
+	-Install Docker Desktop for Apple Silicon (make sure the space allocated for docker is 80GB or so as the container is 41GB)
 	
 	-Enable Rosetta in the operating system
 	
