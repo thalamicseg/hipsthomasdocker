@@ -21,7 +21,7 @@ The HIPS-THOMAS workflow is shown below:-
 - If you already have a thomas docker container and want to install a patch (300Mb vs 41Gb so much faster), see the 1.0 branch of hipsthomasdocker but is not recommended as that branch will not be maintained
 - **MAC USERS TAKE NOTE** Apple Silicon is not compatible with a lot of docker containers. So follow these steps-
   
-	-Install Docker Desktop for Apple Silicon
+	-Install Docker Desktop for Apple Silicon (make sure the space allocated for docker is 80Gb or so as the container is 41Gb)
 	
 	-Enable Rosetta in the operating system
 	
