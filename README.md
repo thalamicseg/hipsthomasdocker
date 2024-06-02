@@ -55,6 +55,8 @@ This will significantly reduce the run time (which in some cases does not finish
 
 ## Common issues
 - The first cropping step of THOMAS occasionally fails in older patients due to presence of neck tissue. If you are seeing failures (abormally small or large values of 1-THALAMUS typically 3000-6000 is normal, anything outside is suspect, any 0s in nuclei typically 2-AV or 9-LGN or 10-MGN are also indicative of crop failures albeit more subtle asymmetric crop than complete failure) view crop_T1.nii.gz from left and the central slice should have both thalami.
+  
+- Cropping step also fails for skull stripped data. I am working on a fix for this (need to upload) but for now DO NOT supply skull stripped data to THOMAS
 
 - In case of a crop failure, try running ```bet``` and then run thomas on brain extracted data. The bet command we recommend is ```bet input output -B -R``` where input is your T1 image. Note that ```bet``` is available inside the docker container which can be entered using ```docker run -v ${PWD}:${PWD} -w ${PWD} --rm -it thomasmerged``` and you can simply run bet here on a case by case basis or write a batch script. This is useful if bet is not installed locally
 - 7T MP2RAGE ratio normalized images is scaled from -0.5 to 0.5 sometimes. In that case, scale it up to a big integer before using THOMAS. You can scale this using ```fslmaths T1.nii.gz -mul -16384 T1s.nii.gz``` for example.
