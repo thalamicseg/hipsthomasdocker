@@ -5,7 +5,7 @@
 
 
 ## Introduction
-This is the repository for HIPS-THOMAS, a Docker-based pipeline for accurate segmentation of the Thalamus and several other sub-cortical nuclei using the THOMAS segmentation program. HIPS-THOMAS processes both WMn (white matter nulled) and T1w (SPGR,MPRAGE) images but performs much better than THOMAS for T1w data as it synthesizes WMn-like images from T1 prior to running THOMAS.
+This is the repository for HIPS-THOMAS, a Docker-based pipeline for accurate segmentation of the Thalamus and several other sub-cortical nuclei using the THOMAS segmentation program. HIPS-THOMAS processes both WMn (white matter nulled) and T1w (SPGR,MPRAGE) images but performs much better than THOMAS for T1w data as it synthesizes WMn-like images from T1s prior to running THOMAS.
 
 The HIPS-THOMAS workflow is illustrated here:
 
