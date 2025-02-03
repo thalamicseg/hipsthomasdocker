@@ -44,7 +44,7 @@ This will significantly reduce the run time (which in some cases does not finish
 - For WMn/FGATIR files, use the following command: ```docker run -v ${PWD}:${PWD} -w ${PWD} --user $(id -u):$(id -g) --rm -t anagrammarian/thomasmerged bash -c "hipsthomas_csh -i WMn.nii.gz" ```.
 - You can also use the two wrapper bash scripts thomaswmn.txt and thomast1_hips.txt (see last 2 steps of Install)
 - Note that you cannot use thomast1_hips.txt for WMn/FGATIR or thomaswmn for T1.
-- Note also the -t1 and -big arguments for **T1 alone**. THe -big helps with patients with large ventricles (older population). The -t1 triggers the HIPS WMn synthesis.
+- Note also the -t1 and -big arguments for **T1 alone**. The -big option helps with patients with large ventricles (older population). The -t1 triggers the HIPS WMn synthesis.
 
 ## Singularity usage
 - You need to tweak the calls slightly from docker usage above but briefly for T1 run the following:
