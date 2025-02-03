@@ -62,12 +62,12 @@ apptainer build sthomas.sif docker://anagrammarian/sthomas
 <mark>TODO: check</mark>
 The Apptainer instantiation is a little bit different than Docker. For example, to run on a T1 image, call Apptainer like this:
 ```
-thomas_t1_apptainer.sh T1.nii.gz
+apptainer run -B ${PWD}:${PWD} -W ${PWD} -u --cleanenv path/to/thomas3.sif bash -c "hipsthomas.sh -i T1.nii.gz - big"
 ```
 
 For a WMn/FGATIR image run the following:
 ```
-thomas_wmn_apptainer.sh WMn.nii.gz
+apptainer run -B ${PWD}:${PWD} -W ${PWD} -u --cleanenv path/to/thomas3.sif bash -c "hipsthomas.sh -i WMn.nii.gz"
 ```
 
 >[!NOTE]
