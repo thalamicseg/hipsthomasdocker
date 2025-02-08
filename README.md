@@ -34,6 +34,17 @@ This container-based version for THOMAS has a number of new features:
 -  **thomas.lut**: another color table, used for <mark>TODO</mark>.
 
 
+## Installation
+>[!NOTE]
+>To run the HIPS_THOMAS program you must have a working installation of the [Docker platform software](https://www.docker.com/get-started) on your local computer. Installation instructions vary by OS, so please see this ["Getting Started with Docker"](https://www.docker.com/get-started) page for simple instructions on how to download and install Docker.
+
+#### Get HIPS-THOMAS
+
+The HIPS-THOMAS program is packaged as a Docker container. As the container is fairly large (~17G), we recommend that you download it to your local machine before first use. Once Docker is installed on your computer, you may download the HIPS-THOMAS container via the Docker Desktop GUI (if you installed it) or via this command line instruction:
+```
+docker pull anagrammarian/sthomas
+```
+
 ## Running
 To run HIPS-THOMAS, each anatomical file should be in a separate directory and the results are placed in that same directory. You can launch the container from the command line by running the provided shell scripts inside the directory containing the input image file.
 
