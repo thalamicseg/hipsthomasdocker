@@ -5,7 +5,7 @@
 
 
 ## Introduction
-This is the repository for HIPS-THOMAS, a Docker-based pipeline for accurate segmentation of the Thalamus and several other sub-cortical nuclei using the THOMAS segmentation program. HIPS-THOMAS processes both WMn (white matter nulled) and T1w (SPGR,MPRAGE) images but performs much better than THOMAS for T1w data as it synthesizes WMn-like images from T1s prior to running THOMAS.
+This is the repository for HIPS-THOMAS, a Docker-based pipeline for accurate segmentation of thalamic and several other deep grey nuclei using the THOMAS segmentation program. HIPS-THOMAS processes both White-matter-nulled (WMn aka FGATIR) and standard T1-weighted (3D SPGR,MPRAGE, IR-SPGR) images. For standard T1 MRI, it synthesizes WMn-like images prior to segmentation resulting in much improved performance compared to majority voting and mutual-information based registration approaches previously proposed.
 
 The HIPS-THOMAS workflow is illustrated here:
 
@@ -15,13 +15,14 @@ The HIPS-THOMAS workflow is illustrated here:
 ## Features
 This container-based version for THOMAS has a number of new features:
 1. It is based on Python 3.12 and uses a minimal number of modules from FSL, making it much smaller than previous versions (16G vs 41G).
-2. It now also segments the basal ganglia, claustrum, and red nucleus!!
-3. It generates a quality control file called `stlabels_LR.png` and a composite label file with contiguous labels (for deep learning training) called `stlabels_LR.nii.gz`. Both files are produced at the top level of output results: parallel with the `left` and `right` directories.
+2. It now also segments the basal ganglia, claustrum, red nucleus with hippocampus, amygdala, and the ventricles coming very soon. 
+3. It generates a quality control file called `stlabels_LR.png` and a composite label file with contiguous left and right labels (for deep learning training) called `stlabels_LR.nii.gz`. Both files are produced at the top level of output results: parallel with the `left` and `right` directories.
+4. Centrolateral (CL) nucleus is also generated but using a different provenance so is not fused in the thomas/thomasfull files but available as 18-CL and 18-CL_full 
 
 #### Differences from previous versions:
-1. The main script is now Bash shell based and is called `hipsthomas.sh`,
-2. The result files (`thomas`, `thomas_R`, `thomasfull_L`, and `thomasfull_R` now have both thalami and other deep grey structures,
-3. The `nuclei_vols*.txt` files have volumes of both thalami and other deep grey structures,
+1. The main script is now bash shell based and is called `hipsthomas.sh` (replacing hipsthomas_csh)
+2. The result files (`thomas`, `thomas_R`, `thomasfull_L`, and `thomasfull_R` now have both thalami and deep grey nuclei,
+3. The `nuclei_vols*.txt` files have volumes of both thalami and deep grey nuclei,
 4. The right side processing uses the same crop as the left side, so it is faster and you can combine L and R easily (e.g., using fslmaths).
 
 ## Repository Resources
@@ -35,6 +36,10 @@ This container-based version for THOMAS has a number of new features:
 
 
 ## Running
+Make sure docker is installed already on your machine or install it from here https://docs.docker.com/get-docker/.  
+
+Download the HIPS-THOMAS container from dockerhub ```docker pull anagrammarian/sthomas```. You can paste this command on the docker shell or in a Terminal if the docker desktop is running.
+
 To run HIPS-THOMAS, each anatomical file should be in a separate directory and the results are placed in that same directory. You can launch the container from the command line by running the provided shell scripts inside the directory containing the input image file.
 
 For example, given an input image 'T1.nii.gz', in the current working directory, the container would be run by the following command:
@@ -42,13 +47,15 @@ For example, given an input image 'T1.nii.gz', in the current working directory,
 thomas_t1.sh T1.nii.gz
 ```
 
-For T1 MPRAGE and SPGR images, HIPS synthesizes WMn-MPRAGE like images, improving thalamic contrast and also allowing standard THOMAS to be run (which then uses CC metric for nonlinear registration and joint fusion). This is not possible with direct T1 as the contrast is different from the template, thus forcing MI metric (which is less accurate) and majority voting for label fusion (which is also suboptimal).
+For T1 MPRAGE/SPGR images, HIPS synthesizes WMn-MPRAGE like images, improving thalamic contrast and also allowing standard THOMAS to be run (which then uses CC metric for nonlinear registration and joint fusion). This is not possible with direct T1 as the contrast is different from the template, thus forcing MI metric (which is less accurate) and majority voting for label fusion (which is also suboptimal).
 
 THOMAS processing works even better on WMn MPRAGE (FGATIR) data, due to the better intra-thalamic contrast. In the following example, WMn.nii.gz is the white matter nulled MPRAGE file (or FGATIR if you will/must).
 ```
 thomas_wmn.sh WMn.nii.gz
 ```
+TODO- need to tell users how to clone repository or at least download scripts/example
 
+Still think having a script free copy paste from here docker run bla blal is useful. 
 
 ### Apptainer (nee Singularity):
 
@@ -80,13 +87,15 @@ The directories named **left** and **right** contain the outputs, which include:
 - **thomas_L.nii.gz** (or **thomas_R.nii.gz**): a single file with all nucleus labels, cropped to the region of interest.
 - **thomasfull_L.nii.gz** (or **thomasfull_R.nii.gz**): which is the same size as the input file (i.e. full size as opposed to the **thomas_{L/R}.nii.gz** files which are cropped).
 - **nucleiVols.txt** and **nucleiVolsMV.txt**: contains the nuclei volume statistics for joint fusion and majority voting, respectively.
-- **regn.nii.gz**: is the custom template registered to the input image. This file is critical for debugging. Make sure this file and **crop_**\<inputfilename\> are well aligned. Note that this is for left side. The right regn.nii.gz needs to be swapped LR before it will align to **crop_**\<inputfilename\>. 
+- **regn.nii.gz**: is the custom template registered to the input image. This file is critical for debugging and is the lower panel of the qc image. Make sure this file and **crop_**\<inputfilename\> are well aligned. Note that this is separate for left and right sides. 
 
 
 ## Citation
-HIPS-THOMAS is in press in *Brain Structure and Function*. The *medRxiv* preprint can be found at https://www.medrxiv.org/content/10.1101/2024.01.30.24301606v1
+The HIPS-THOMAS paper published in Brain Structure and Function can be found here https://pubmed.ncbi.nlm.nih.gov/38546872/ 
 
-	Vidal JP, Danet L, Péran P, Pariente J, Bach Cuadra M, Zahr NM, Barbeau EJ, Saranathan M. Robust thalamic nuclei segmentation from T1-weighted MRI using polynomial intensity transformation. Brain Structure and Function; 2024
+The *medRxiv* preprint can be found at https://www.medrxiv.org/content/10.1101/2024.01.30.24301606v1
+
+	Vidal JP, Danet L, Péran P, Pariente J, Bach Cuadra M, Zahr NM, Barbeau EJ, Saranathan M. Robust thalamic nuclei segmentation from T1-weighted MRI using polynomial intensity transformation. Brain Structure and Function; 229(5):1087-1101 (2024)
 
 The original *Neuroimage* paper on THOMAS can be found here https://pubmed.ncbi.nlm.nih.gov/30894331/
 
