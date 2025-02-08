@@ -8,7 +8,7 @@ This is a docker container for HIPS-THOMAS, a new modified pipeline for accurate
 
 The HIPS-THOMAS workflow is shown below:-
 
-![HIPS-THOMAS workflow](https://github.com/thalamicseg/hipsthomasdocker/blob/main/hipsthomas.JPG)
+![HIPS-THOMAS workflow](https://github.com/thalamicseg/hipsthomasdocker/blob/main/HIPSTHOMAS.JPG)
 
 
 ## Installation instructions (see key notes below for MAC and for SINGULARITY)
