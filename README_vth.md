@@ -9,7 +9,7 @@ This is the repository for HIPS-THOMAS, a Docker-based pipeline for accurate seg
 
 The HIPS-THOMAS workflow is illustrated here:
 
-![HIPS-THOMAS workflow](https://github.com/thalamicseg/hipsthomasdocker/blob/rev2/hipsthomas.JPG)
+![HIPS-THOMAS workflow](https://github.com/thalamicseg/hipsthomasdocker/blob/rev2/HIPSTHOMAS.jpg)
 
 
 ## Features
