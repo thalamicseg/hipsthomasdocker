@@ -76,6 +76,7 @@ export -f process_files
 export CTYPE
 
 # Use find to traverse directories and call the process_files function
-find . -type d -exec bash -c 'process_files "$0"' {} \;
+touch .
+find . -type d ! -newer . -exec bash -c 'process_files "$0"' {} \;
 
 cd $CPWD
