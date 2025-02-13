@@ -5,7 +5,7 @@
 
 
 ## Introduction
-This is the repository for HIPS-THOMAS, a Docker-based pipeline for accurate segmentation of the Thalamus and several other sub-cortical nuclei using the THOMAS segmentation program. HIPS-THOMAS processes both WMn (white matter nulled) and T1w (SPGR,MPRAGE) images but performs much better than THOMAS for T1w data as it synthesizes WMn-like images from T1s prior to running THOMAS.
+This is the repository for HIPS-THOMAS, a Docker-based pipeline for accurate segmentation of thalamic and several other deep grey nuclei using the THOMAS segmentation program. HIPS-THOMAS processes both white-matter-nulled (WMn aka FGATIR) and standard T1-weighted (3D SPGR, MPRAGE, IR-SPGR) images. For standard T1 MRI it synthesizes WMn-like images prior to segmentation, resulting in much improved performance compared to majority voting and mutual information based registration approaches previously proposed.
 
 The HIPS-THOMAS workflow is illustrated here:
 
@@ -15,13 +15,14 @@ The HIPS-THOMAS workflow is illustrated here:
 ## Features
 This container-based version for THOMAS has a number of new features:
 1. It is based on Python 3.12 and uses a minimal number of modules from FSL, making it much smaller than previous versions (16G vs 41G).
-2. It now also segments the basal ganglia, claustrum, and red nucleus!!
-3. It generates a quality control file called `stlabels_LR.png` and a composite label file with contiguous labels (for deep learning training) called `stlabels_LR.nii.gz`. Both files are produced at the top level of output results: parallel with the `left` and `right` directories.
+2. It now also segments the basal ganglia, claustrum, red nucleus with hippocampus, and amydala (with ventricles coming soon).
+3. It generates a quality control file called `stlabels_LR.png` and a composite label file with contiguous left and right labels (for deep learning training) called `stlabels_LR.nii.gz`. Both files are produced at the top level of output results: parallel with the `left` and `right` directories.
+4. The Centrolateral (CL) nucleus is also generated, but with a different provenance so it is not fused in the thomas or thomasfull files but is available in the `CL_L.nii.gz` and `CL_R.nii.gz` files.
 
 #### Differences from previous versions:
-1. The main script is now Bash shell based and is called `hipsthomas.sh`,
-2. The result files (`thomas`, `thomas_R`, `thomasfull_L`, and `thomasfull_R` now have both thalami and other deep grey structures,
-3. The `nuclei_vols*.txt` files have volumes of both thalami and other deep grey structures,
+1. The main script is now Bash shell based and is called `hipsthomas.sh` (replacing hipsthomas_csh),
+2. The result files (`thomas_L`, `thomas_R`, `thomasfull_L`, and `thomasfull_R` now have both thalami and deep grey nuclei,
+3. The `nuclei_vols*.txt` files have volumes of both thalami and deep grey nuclei,
 4. The right side processing uses the same crop as the left side, so it is faster and you can combine L and R easily (e.g., using fslmaths).
 
 ## Repository Resources
@@ -29,9 +30,10 @@ This container-based version for THOMAS has a number of new features:
 -  **thomas_t1.sh**: is the main script to call to process T1 MPRAGE or SPGR files.
 -  **thomas_wmn.sh**: is the main script to call to process WMn MPRAGE/FGATIR files.
 -  **thomas_batch.sh**: <mark>TODO</mark>
+-  **thomas_tree.sh**: <mark>TODO</mark>
 -  **example.tgz**: a gzipped tar file containing sample T1 and WMn images.
 -  **CustomAtlas.ctbl**: is a color table, provided for visualization.
--  **thomas.lut**: another color table, used for <mark>TODO</mark>.
+-  **Thomas.lut**: another color table, used for <mark>TODO</mark>.
 
 
 ## Installation
@@ -40,31 +42,47 @@ This container-based version for THOMAS has a number of new features:
 
 #### Get HIPS-THOMAS
 
-The HIPS-THOMAS program is packaged as a Docker container. As the container is fairly large (~17G), we recommend that you download it to your local machine before first use. Once Docker is installed on your computer, you may download the HIPS-THOMAS container via the Docker Desktop GUI (if you installed it) or via this command line instruction:
+The HIPS-THOMAS program is packaged as a Docker container. As the container is fairly large (~17G), you should download it to your local machine before first use. Once Docker software is installed on your computer, you may download the HIPS-THOMAS container via the Docker Desktop GUI (if you installed it) or via this command line instruction:
 ```
 docker pull anagrammarian/sthomas
 ```
 
-## Running
-To run HIPS-THOMAS, each anatomical file should be in a separate directory and the results are placed in that same directory. You can launch the container from the command line by running the provided shell scripts inside the directory containing the input image file.
+#### Get the Support Files (optional)
 
-For example, given an input image 'T1.nii.gz', in the current working directory, the container would be run by the following command:
+To use HIPS-THOMAS, you can issue Docker commands from the command line **OR** via one of several shell scripts provided in our [GitHub support repository](https://github.com/thalamicseg/hipsthomasdocker). If you have Git installed on your computer, the following command will download the support files into a directory named `hipsthomasdocker`:
+```
+git clone https://github.com/thalamicseg/hipsthomasdocker.git
+```
+In addition to convenient run scripts, the support repository also includes example T1 and WMn images and some color lookup tables.
+
+
+## Running
+
+Each anatomical image file to be processed should be in a separate directory and the results are placed in that same directory. You can launch the HIPS-THOMAS container from the command line by running the relevant Docker command (or shell script) inside the directory containing the input image file.
+
+For example, given an input image 'T1.nii.gz', in the current working directory, processing could be initiated by using the relevant script from the support repository:
 ```
 thomas_t1.sh T1.nii.gz
 ```
+<mark>TODO: Docker equivalent</mark>
 
-For T1 MPRAGE and SPGR images, HIPS synthesizes WMn-MPRAGE like images, improving thalamic contrast and also allowing standard THOMAS to be run (which then uses CC metric for nonlinear registration and joint fusion). This is not possible with direct T1 as the contrast is different from the template, thus forcing MI metric (which is less accurate) and majority voting for label fusion (which is also suboptimal).
+For T1 MPRAGE/SPGR images HIPS synthesizes WMn-MPRAGE-like images, improving thalamic contrast and also allowing standard THOMAS to be run (which then uses CC metric for nonlinear registration and joint fusion). This is not possible with direct T1 as the contrast is different from the template, thus forcing a mutual information metric (which is less accurate) and majority voting for label fusion (which is also suboptimal).
 
-THOMAS processing works even better on WMn MPRAGE (FGATIR) data, due to the better intra-thalamic contrast. In the following example, WMn.nii.gz is the white matter nulled MPRAGE file (or FGATIR if you will/must).
+THOMAS processing works better on WMn MPRAGE (FGATIR) data, due to the better intra-thalamic contrast.
+
+In the following example, WMn.nii.gz is the white matter nulled MPRAGE file (or FGATIR if you will). It is processed using the relevant script from the support repository:
 ```
 thomas_wmn.sh WMn.nii.gz
 ```
 
+<mark>TODO: Docker equivalent</mark>
+
 
 ### Apptainer (nee Singularity):
 
-You can directly pull the Docker container image from dockerhub and save it as an Apptainer (Singularity) '.sif' file.
+You can pull the Docker container image directly from DockerHub and save it as an Apptainer (Singularity) '.sif' file.
 
+<mark>TODO: check</mark>
 First, install Apptainer using the instructions found here https://apptainer.org/docs/admin/main/installation.html. Once installed, run:
 ```
 apptainer build sthomas.sif docker://anagrammarian/sthomas
@@ -91,13 +109,18 @@ The directories named **left** and **right** contain the outputs, which include:
 - **thomas_L.nii.gz** (or **thomas_R.nii.gz**): a single file with all nucleus labels, cropped to the region of interest.
 - **thomasfull_L.nii.gz** (or **thomasfull_R.nii.gz**): which is the same size as the input file (i.e. full size as opposed to the **thomas_{L/R}.nii.gz** files which are cropped).
 - **nucleiVols.txt** and **nucleiVolsMV.txt**: contains the nuclei volume statistics for joint fusion and majority voting, respectively.
-- **regn.nii.gz**: is the custom template registered to the input image. This file is critical for debugging. Make sure this file and **crop_**\<inputfilename\> are well aligned. Note that this is for left side. The right regn.nii.gz needs to be swapped LR before it will align to **crop_**\<inputfilename\>. 
+- **regn.nii.gz**: is the custom template registered to the input image. This file is critical for debugging and is shown in the lower panel of the quality control image. Make sure this file and **crop_**\<inputfilename\> are well aligned. Note that this is separate for left and right sides.
+
+#### List of Output ROIs
+<mark>TODO: list ROIs</mark>
 
 
 ## Citation
-HIPS-THOMAS is in press in *Brain Structure and Function*. The *medRxiv* preprint can be found at https://www.medrxiv.org/content/10.1101/2024.01.30.24301606v1
+HIPS-THOMAS paper published in *Brain Structure and Function* can be found here https://pubmed.ncbi.nlm.nih.gov/38546872/
 
-	Vidal JP, Danet L, Péran P, Pariente J, Bach Cuadra M, Zahr NM, Barbeau EJ, Saranathan M. Robust thalamic nuclei segmentation from T1-weighted MRI using polynomial intensity transformation. Brain Structure and Function; 2024
+ The *medRxiv* preprint can be found at https://www.medrxiv.org/content/10.1101/2024.01.30.24301606v1
+
+	Vidal JP, Danet L, Péran P, Pariente J, Bach Cuadra M, Zahr NM, Barbeau EJ, Saranathan M. Robust thalamic nuclei segmentation from T1-weighted MRI using polynomial intensity transformation. Brain Structure and Function; 229(5):1087-1101 (2024)
 
 The original *Neuroimage* paper on THOMAS can be found here https://pubmed.ncbi.nlm.nih.gov/30894331/
 
@@ -113,4 +136,4 @@ Please contact Manoj Saranathan manojkumar.saranathan@umassmed.edu if you have a
 >[!WARNING]
 >This Software is provided "AS IS" and neither University of Arizona (UofAZ) nor any contributor to the software (each a "Contributor") shall have any obligation to provide maintenance, support, updates, enhancements or modifications thereto. UofAZ AND ALL CONTRIBUTORS SPECIFICALLY DISCLAIM ALL EXPRESS AND IMPLIED WARRANTIES OF ANY KIND INCLUDING, BUT NOT LIMITED TO, ANY WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL UofAZ OR ANY CONTRIBUTOR BE LIABLE TO ANY PARTY FOR DIRECT, INDIRECT, SPECIAL, INCIDENTAL, EXEMPLARY OR CONSEQUENTIAL DAMAGES HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY ARISING IN ANY WAY RELATED TO THE SOFTWARE, EVEN IF UofAZ OR ANY CONTRIBUTOR HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. TO THE MAXIMUM EXTENT NOT PROHIBITED BY LAW OR REGULATION, YOU FURTHER ASSUME ALL LIABILITY FOR YOUR USE, REPRODUCTION, MAKING OF DERIVATIVE WORKS, DISPLAY, LICENSE OR DISTRIBUTION OF THE SOFTWARE AND AGREE TO INDEMNIFY AND HOLD HARMLESS UofAZ AND ALL CONTRIBUTORS FROM AND AGAINST ANY AND ALL CLAIMS, SUITS, ACTIONS, DEMANDS AND JUDGMENTS ARISING THEREFROM.
 
-© Copyright Manoj Saranathan 2023. All rights reserved.
+© Copyright Manoj Saranathan, Julie Vidal 2023. All rights reserved.
