@@ -29,15 +29,15 @@ This container-based version for THOMAS has a number of new features:
 
 -  **thomas_t1.sh**: is the main script to call to process T1 MPRAGE or SPGR files.
 -  **thomas_wmn.sh**: is the main script to call to process WMn MPRAGE/FGATIR files.
--  **thomas_batch.sh**: <mark>TODO</mark>
--  **thomas_tree.sh**: <mark>TODO</mark>
+-  **thomas_batch.sh**: <mark>TODO: describe</mark>
+-  **thomas_tree.sh**: Supplemental script to process multiple image files within a directory tree.
 -  **example.tgz**: a gzipped tar file containing sample T1 and WMn images.
--  **CustomAtlas.ctbl**: is a color table, provided for visualization.
--  **Thomas.lut**: another color table, used for <mark>TODO</mark>.
+-  **CustomAtlas.ctbl**: is a color table, provided for visualization <mark>TODO: by which application?</mark>
+-  **Thomas.lut**: another color table, used for <mark>TODO: which applications use this one?</mark>
 
 
 ## Installation
->[!NOTE]
+>[!IMPORTANT]
 To run the HIPS_THOMAS program you must have a working installation of the [Docker platform software](https://www.docker.com/get-started) on your local computer. Installation instructions vary by OS, so please see this ["Getting Started with Docker"](https://www.docker.com/get-started) page for simple instructions on how to download and install Docker.
 
 #### Get HIPS-THOMAS
@@ -49,11 +49,11 @@ docker pull anagrammarian/sthomas
 
 #### Get the Support Files (optional)
 
-To use HIPS-THOMAS, you issue Docker commands from the command line **OR** use one of several shell scripts provided in this [support repository](https://github.com/thalamicseg/hipsthomasdocker). If you have Git installed on your computer, the following command will download the support files into a directory named `hipsthomasdocker`:
+To use HIPS-THOMAS, you issue Docker commands from the command line **OR** use one of several shell scripts provided in this [support repository](https://github.com/thalamicseg/hipsthomasdocker). If you have Git installed on your computer, the following command will download this support files into a directory named `hipsthomasdocker`:
 ```
 git clone https://github.com/thalamicseg/hipsthomasdocker.git
 ```
-In addition to convenient run scripts, the support repository also includes example T1 and WMn images and some color lookup tables.
+In addition to convenient run scripts, this support repository also includes example T1 and WMn images and some color lookup tables.
 
 ## Running
 
@@ -66,61 +66,77 @@ Once you have downloaded the HIPS-THOMAS Docker container, you may start process
 >[!NOTE]
 The following example Docker command lines assume `bash` as the shell. Also, running Docker on Linux requires a slightly different command line than on macOS or Windows, so please select the appropriate command for your operating system.
 
-**T1 on Linux**: Given a T1 input image, 'T1.nii.gz', in the current working directory, processing can be initiated by the following Docker command:
+**T1 on Linux**: Given a T1 input image (T1.nii.gz) in the current working directory, processing can be initiated by the following Docker command:
 ```
-docker run -it --rm --name sthomas -v ${PWD}:/data -w /data --user ${UID}:${GID} anagrammarian/sthomas hipsthomas.sh -v -i T1.nii.gz -t1
-```
-
-**T1 on macOS**: On macOS you should omit the `--user` flag and the user ID (`UID`) and group ID (`GID`) arguments. So, for a T1 image, 'T1.nii.gz', in the current working directory:
-```
-docker run -it --rm --name sthomas -v ${PWD}:/data -w /data anagrammarian/sthomas hipsthomas.sh -v -i T1.nii.gz -t1
+docker run -it --rm --name sthomas -v ${PWD}:/data -w /data --user ${UID}:${GID} anagrammarian/sthomas hipsthomas.sh -v -t1 -i T1.nii.gz
 ```
 
-**WMn on Linux**: Given a WMn input image, 'WMn.nii.gz', in the current working directory, processing can be initiated by the following Docker command:
+**T1 on macOS**: On macOS you should omit the `--user` flag and the user ID (`UID`) and group ID (`GID`) arguments. So, for a T1 image (subj1.nii.gz) in the current working directory:
+```
+docker run -it --rm --name sthomas -v ${PWD}:/data -w /data anagrammarian/sthomas hipsthomas.sh -v -t1 -i subj1.nii.gz
+```
+
+**WMn on Linux**: Given a WMn input image (WMn.nii.gz) in the current working directory, processing can be initiated by the following Docker command:
 ```
 docker run -it --rm --name sthomas -v ${PWD}:/data -w /data --user ${UID}:${GID} anagrammarian/sthomas hipsthomas.sh -v -i WMn.nii.gz
 ```
 
-**WMn on macOS**: On macOS you should omit the `--user` flag and the user ID (`UID`) and group ID (`GID`) arguments. So, for a WMn image, 'WMn.nii.gz', in the current working directory:
+**WMn on macOS**: On macOS you should omit the `--user` flag and the user ID (`UID`) and group ID (`GID`) arguments. So, for a WMn image (CAM003_WMn.nii.gz) in the current working directory:
 ```
-docker run -it --rm --name sthomas -v ${PWD}:/data -w /data anagrammarian/sthomas hipsthomas.sh -v -i WMn.nii.gz
+docker run -it --rm --name sthomas -v ${PWD}:/data -w /data anagrammarian/sthomas hipsthomas.sh -v -i CAM003_WMn.nii.gz
 ```
 
 
 ### Running with the Support Scripts
 
-[As mentioned above](#get-the-support-files-optional), this support repository provides several "wrapper" scripts which can be used to process one (or more) structural images. For example, given an input image 'T1.nii.gz', in the current working directory, processing can be initiated by using the relevant T1 script from the support repository:
+[As mentioned above](#get-the-support-files-optional), this support repository provides several "wrapper" scripts which can be used to process one (or more) structural images. For example, given an input image 'T1.nii.gz', in the current working directory, processing can be initiated by using the relevant T1 script from this support repository:
 ```
-thomas_t1.sh T1.nii.gz
-```
-
-For WMn (FGATIR, if you will) images, THOMAS processing works better, due to the better intra-thalamic contrast. In the following example, the white matter nulled MPRAGE file (WMN.nii.gz) in the current directory, is processed using the relevant WMn script from the support repository:
-```
-thomas_wmn.sh WMn.nii.gz
+/path/to/thomas_t1.sh T1.nii.gz
 ```
 
-### Running with Apptainer (nee Singularity):
+For WMn (FGATIR, if you will) images, THOMAS processing works better, due to the better intra-thalamic contrast. In the following example, the white matter nulled MPRAGE file (WMN.nii.gz) in the current directory, is processed using the relevant WMn script from this support repository:
+```
+/path/to/thomas_wmn.sh WMn.nii.gz
+```
 
-You can pull the Docker container image directly from DockerHub and save it as an Apptainer (Singularity) '.sif' file.
+### Building and Running with Apptainer (nee Singularity):
 
-First, install Apptainer using the instructions found here https://apptainer.org/docs/admin/main/installation.html. Once installed, run:
+#### Building the Apptainer Container
+>[!TIP]
+Users who have sufficient permissions on their machine can install Apptainer using the instructions found here https://apptainer.org/docs/admin/main/installation.html.
+
+Linux users who use Apptainer instead of Docker (e.g., HPC users) can pull the HIP-THOMAS Docker container directly from DockerHub and build an Apptainer (.sif) container from it.
+
+**Please be patient** as Apptainer must download and convert the entire HIPS-THOMAS Docker container.
 ```
 apptainer build sthomas.sif docker://anagrammarian/sthomas
 ```
 
-<mark>TODO: check</mark>
-The Apptainer instantiation is a little bit different than Docker. For example, to run on a T1 image, call Apptainer like this:
-```
-thomas_t1_apptainer.sh T1.nii.gz
-```
-
-For a WMn/FGATIR image run the following:
-```
-thomas_wmn_apptainer.sh WMn.nii.gz
-```
-
+#### Running with Apptainer at the Command Line
 >[!NOTE]
->That the `sthomas.sif` container can be saved and run from anywhere (illustrated in the above example by 'path/to/sthomas.sif'). For example, if you save the container in your home bin directory (~/bin), you would specify the path as `/home/yourusername/bin/sthomas.sif`
+>The container (`sthomas.sif`) can be saved and run from any convenient directory and, therefore, must be explicitly specified in the Apptainer command. For example, if you save the container in your home bin directory (~/bin), you would specify the path to it as `~/bin/sthomas.sif`. (In the examples below, the path is specified as `/path/to/sthomas.sif`)
+
+Once you have built the Apptainer container, you can start the container from the command line. For example, to process a T1 image (CAM003.nii.gz) in the current directory:
+```
+apptainer exec --cleanenv --bind ${PWD}:/data /path/to/sthomas.sif /thomas/src/hipsthomas.sh -t1 -i CAM003.nii.gz
+```
+To process a WMn image (subj3_WMn.nii.gz) in the current directory:
+```
+apptainer exec --cleanenv --bind ${PWD}:/data /path/to/sthomas.sif /thomas/src/hipsthomas.sh -t1 -i subj3_WMn.nii.gz
+```
+
+#### Apptainer with Support Scripts
+
+Once you have built the Apptainer container, you can use an appropriate support script from this repository. For example, to run on a T1 image, in the current directory, run the T1 script:
+```
+/path/to/thomas_t1_apptainer.sh /path/to/sthomas.sif subj2_T1.nii.gz
+```
+
+For a WMn/FGATIR image, in the current directory, run the WMn script:
+```
+/path/to/thomas_wmn_apptainer.sh /path/to/sthomas.sif subj2_WMn.nii.gz
+```
+
 
 
 ## Outputs
@@ -131,7 +147,7 @@ The directories named **left** and **right** contain the outputs, which include:
 - **nucleiVols.txt** and **nucleiVolsMV.txt**: contains the nuclei volume statistics for joint fusion and majority voting, respectively.
 - **regn.nii.gz**: is the custom template registered to the input image. This file is critical for debugging and is shown in the lower panel of the quality control image. Make sure this file and **crop_**\<inputfilename\> are well aligned. Note that this is separate for left and right sides.
 - **EXTRAS**: Additional processing artifacts are saved in both the `left` and `right` subdirectories.
-- **EXTRAS/MV**: <mark>TODO: explain</mark>
+- **EXTRAS/MV**: Directory containing the ROIs processed using Majority Voting algorithm.
 
 ### List of Output ROIs
 | Label | Region of Interest |
