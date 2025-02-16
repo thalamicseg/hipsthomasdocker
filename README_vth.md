@@ -7,6 +7,8 @@
 ## Introduction
 This is the repository for HIPS-THOMAS, a Docker-based pipeline for accurate segmentation of thalamic and several other deep grey nuclei using the THOMAS segmentation program. HIPS-THOMAS processes both white-matter-nulled (WMn aka FGATIR) and standard T1-weighted (3D SPGR, MPRAGE, IR-SPGR) images. For standard T1 MRI it synthesizes WMn-like images prior to segmentation, resulting in much improved performance compared to majority voting and mutual information based registration approaches previously proposed. Specifically, for T1 images HIPS synthesizes WMn-MPRAGE-like images, improving thalamic contrast and also allowing standard THOMAS to be run (which then uses CC metric for nonlinear registration and joint fusion). This processing is not possible with T1 as the contrast is different from the template, thus forcing a mutual information metric (which is less accurate) and majority voting for label fusion (which is also suboptimal).
 
+Note that the docker container is brand-new and you need to delete the older anagrammarian/thomasmerged containers and redownload this new one.
+
 The HIPS-THOMAS workflow is illustrated here:
 
 ![HIPS-THOMAS workflow](https://github.com/thalamicseg/hipsthomasdocker/blob/main/HIPSTHOMAS.jpg)
@@ -15,15 +17,16 @@ The HIPS-THOMAS workflow is illustrated here:
 ## Features
 This container-based version for THOMAS has a number of new features:
 1. It is based on Python 3.12 and uses a minimal number of modules from FSL, making it much smaller than previous versions (16G vs 41G).
-2. It now also segments the basal ganglia, claustrum, red nucleus with hippocampus, and amydala (with ventricles coming soon).
+2. It now also segments the basal ganglia, claustrum, red nucleus and amygdala (with hippocampus/ventricles coming soon).
 3. It generates a quality control file called `stlabels_LR.png` and a composite label file with contiguous left and right labels (for deep learning training) called `stlabels_LR.nii.gz`. Both files are produced at the top level of output results: parallel with the `left` and `right` results directories.
-4. The Centrolateral (CL) nucleus is also generated, but with a different provenance so it is not fused in the thomas or thomasfull files but is available in the `CL_L.nii.gz` and `CL_R.nii.gz` files.
+4. The Centrolateral (CL) nucleus is also generated, but with a different provenance so it is not fused in the thomas or thomasfull files but is available as `CL_L.nii.gz` and `CL_R.nii.gz` files for reference. It will overlap with other nuclei so use with judgment and caution.
 
 #### Differences from previous versions:
-1. The main script is now Bash shell based and is called `hipsthomas.sh` (replacing hipsthomas_csh),
+1. The main script is now bash shell based and is called `hipsthomas.sh` (replacing hipsthomas_csh),
 2. The result files (`thomas_L`, `thomas_R`, `thomasfull_L`, and `thomasfull_R` now have both thalami and deep grey nuclei,
 3. The `nuclei_vols*.txt` files have volumes of both thalami and deep grey nuclei,
 4. The right side processing uses the same crop as the left side, so it is faster and you can combine L and R easily (e.g., using fslmaths).
+5. All outputs in the main left and right directories are full-size (and match the input T1 or WMn size exactly). Cropped outputs and other accessory files for debugging are now in EXTRAS folder
 
 ## Repository Resources
 
@@ -138,44 +141,45 @@ For a WMn/FGATIR image, in the current directory, run the WMn script:
 ```
 
 
-
 ## Outputs
 The directories named **left** and **right** contain the outputs, which include:
-- The individual label files for each nucleus (e.g. 2-AV.nii.gz for Anteroventral and so on)
+- The individual full-sized label files for each nucleus (e.g. 2-AV.nii.gz for Anteroventral and so on) 
 - **thomas_L.nii.gz** (or **thomas_R.nii.gz**): a single file with all nucleus labels, cropped to the region of interest.
 - **thomasfull_L.nii.gz** (or **thomasfull_R.nii.gz**): which is the same size as the input file (i.e. full size as opposed to the **thomas_{L/R}.nii.gz** files which are cropped).
-- **nucleiVols.txt** and **nucleiVolsMV.txt**: contains the nuclei volume statistics for joint fusion and majority voting, respectively.
+- **nucleiVols.txt** : contains the nuclei volume statistics for joint label fusion labels
 - **regn.nii.gz**: is the custom template registered to the input image. This file is critical for debugging and is shown in the lower panel of the quality control image. Make sure this file and **crop_**\<inputfilename\> are well aligned. Note that this is separate for left and right sides.
-- **EXTRAS**: Additional processing artifacts are saved in both the `left` and `right` subdirectories.
-- **EXTRAS/MV**: Directory containing the ROIs processed using Majority Voting algorithm.
+- **EXTRAS**: Additional processing files are saved in both the `left` and `right` subdirectories.
+- **EXTRAS/MV**: Directory containing the ROIs processed using Majority Voting algorithm and  **nucleiVolsMV.txt** volumes from majority voting labels
 
 ### List of Output ROIs
-| Label | Region of Interest |
-|:------|:-------------------|
-|  1-THALAMUS | Thalamus (whole) |
-|  2-AV | Antero-Ventral Nucleus |
-|  4-VA | Ventral Anterior Nucleus |
-|  5-VLa | Ventral Lateral Nucleus (anterior) |
-|  6-VLP | Ventral Lateral Nucleus (posterior) |
-|  7-VPL | Ventral Posterior Lateral |
-|  4567-VL | Ventral Lateral |
-|  8-Pul | Pulvinar |
-|  9-LGN | Lateral Geniculate Nucleus |
-| 10-MGN | Medial Geniculate Nucleus |
-| 11-CM | Centromedian Nucleus |
-| 12-MD-Pf | Mediodorsal Nucleus |
-| 13-Hb | Habanula |
-| 14-MTT | Mammillothalamic Tract |
-| 26-Acc | Accumbens |
-| 27-Cau | Caudate |
-| 28-Cla | Claustrum |
-| 29-GPe | Globus Pallidus External |
-| 30-GPi | Globus Pallidus Internal |
-| 31-Put | Putamen |
-| 32-RN | Red Nucleus |
-| 33-GP | Globus Pallidus |
-| 34-Amy | Amygdala |
-| CL | Central Lateral Nucleus |
+| Region | Label | Region of Interest |
+| :------|:------|:-------------------|
+| Thalamus | 1-THALAMUS | Thalamus (whole) |
+| Thalamus | 2-AV | Antero-Ventral Nucleus |
+| Thalamus | 4-VA | Ventral Anterior Nucleus |
+| Thalamus | 5-VLa | Ventral Lateral Nucleus (anterior) |
+| Thalamus | 6-VLP | Ventral Lateral Nucleus (posterior) |
+| Thalamus | 7-VPL | Ventral Posterior Lateral |
+| Thalamus | 4567-VL | Ventral Lateral |
+| Thalamus | 8-Pul | Pulvinar |
+| Thalamus | 9-LGN | Lateral Geniculate Nucleus |
+| Thalamus | 10-MGN | Medial Geniculate Nucleus |
+| Thalamus | 11-CM | Centromedian Nucleus |
+| Thalamus | 12-MD-Pf | Mediodorsal Nucleus |
+| Thalamus | CL | Central Lateral Nucleus |
+| Other | 13-Hb | Habanula |
+| Other | 14-MTT | Mammillothalamic Tract |
+| Other | 28-Cla | Claustrum |
+| Other | 32-RN | Red Nucleus |
+| Other | 34-Amy | Amygdala |
+| Basal Ganglia | 26-Acc | Nucleus Accumbens |
+| Basal Ganglia | 27-Cau | Caudate |
+| Basal Ganglia | 29-GPe | Globus Pallidus External |
+| Basal Ganglia | 30-GPi | Globus Pallidus Internal |
+| Basal Ganglia | 31-Put | Putamen |
+| Basal Ganglia | 33-GP | Globus Pallidus (GPe+GPi) |
+
+
 
 
 ## Citation
