@@ -37,11 +37,9 @@ This container-based version for THOMAS has a number of new features:
 
 -  **thomas_t1.sh**: is the main script to call to process T1 MPRAGE or SPGR files.
 -  **thomas_wmn.sh**: is the main script to call to process WMn MPRAGE/FGATIR files.
--  **thomas_batch.sh**: <mark>TODO: describe</mark>
+-  **thomas_batch.sh**: Bash script to process multiple image files.
 -  **thomas_tree.sh**: Supplemental script to process multiple image files within a directory tree.
 -  **example.tgz**: a gzipped tar file containing sample T1 and WMn images.
--  **CustomAtlas.ctbl**: is a color table, provided for visualization <mark>TODO: by which application?</mark>
--  **Thomas.lut**: another color table, used for <mark>TODO: which applications use this one?</mark>
 
 
 ## Installation
@@ -61,7 +59,7 @@ To use HIPS-THOMAS, you issue Docker commands from the command line **OR** use o
 ```
 git clone https://github.com/thalamicseg/hipsthomasdocker.git
 ```
-In addition to convenient run scripts, this support repository also includes example T1 and WMn images and some color lookup tables.
+In addition to convenient run scripts, this support repository also includes example T1 and WMn images.
 
 ## Running
 
@@ -74,28 +72,28 @@ Once you have downloaded the HIPS-THOMAS Docker container, you may start process
 >[!NOTE]
 The following example Docker command lines assume `bash` as the shell. Also, running Docker on Linux requires a slightly different command line than on macOS or Windows, so please select the appropriate command for your operating system.
 
-**T1 on Linux**: Given a T1 input image (T1.nii.gz) in the current working directory, processing can be initiated by the following Docker command:
+**T1 on Linux or Windows Ubuntu WSL**: Given a T1 input image (T1.nii.gz) in the current working directory, processing can be initiated by the following Docker command:
 ```
 docker run -it --rm --name sthomas -v ${PWD}:/data -w /data --user ${UID}:${GID} anagrammarian/sthomas hipsthomas.sh -v -t1 -i T1.nii.gz
 ```
 
-**T1 on macOS**: On macOS you should omit the `--user` flag and the user ID (`UID`) and group ID (`GID`) arguments. So, for a T1 image (subj1.nii.gz) in the current working directory:
+**T1 on macOS or Windows Docker Desktop**: In these environments, you should omit the `--user` flag and the user ID (`UID`) and group ID (`GID`) arguments. So, for a T1 image (subj1.nii.gz) in the current working directory:
 ```
 docker run -it --rm --name sthomas -v ${PWD}:/data -w /data anagrammarian/sthomas hipsthomas.sh -v -t1 -i subj1.nii.gz
 ```
 
-**WMn on Linux**: Given a WMn input image (WMn.nii.gz) in the current working directory, processing can be initiated by the following Docker command:
+**WMn on Linux or Windows Ubuntu WSL**: Given a WMn input image (WMn.nii.gz) in the current working directory, processing can be initiated by the following Docker command:
 ```
 docker run -it --rm --name sthomas -v ${PWD}:/data -w /data --user ${UID}:${GID} anagrammarian/sthomas hipsthomas.sh -v -i WMn.nii.gz
 ```
 
-**WMn on macOS**: On macOS you should omit the `--user` flag and the user ID (`UID`) and group ID (`GID`) arguments. So, for a WMn image (CAM003_WMn.nii.gz) in the current working directory:
+**WMn on macOS or Windows Docker Desktop**: In these environments, you should omit the `--user` flag and the user ID (`UID`) and group ID (`GID`) arguments. So, for a WMn image (CAM003_WMn.nii.gz) in the current working directory:
 ```
 docker run -it --rm --name sthomas -v ${PWD}:/data -w /data anagrammarian/sthomas hipsthomas.sh -v -i CAM003_WMn.nii.gz
 ```
 
 
-### Running with the Support Scripts
+### or Running with the Support Scripts
 
 [As mentioned above](#get-the-support-files-optional), this support repository provides several "wrapper" scripts which can be used to process one (or more) structural images. For example, given an input image 'T1.nii.gz', in the current working directory, processing can be initiated by using the relevant T1 script from this support repository:
 ```
@@ -107,20 +105,21 @@ For WMn (FGATIR, if you will) images, THOMAS processing works better, due to the
 /path/to/thomas_wmn.sh WMn.nii.gz
 ```
 
-### Building and Running with Apptainer (nee Singularity):
-
-#### Building the Apptainer Container
->[!TIP]
-Users who have sufficient permissions on their machine can install Apptainer using the instructions found here https://apptainer.org/docs/admin/main/installation.html.
+### or Running with Apptainer (nee Singularity):
 
 Linux users who use Apptainer instead of Docker (e.g., HPC users) can pull the HIP-THOMAS Docker container directly from DockerHub and build an Apptainer (.sif) container from it.
 
-**Please be patient** as Apptainer must download and convert the entire HIPS-THOMAS Docker container.
+>[!TIP]
+Users who have sufficient permissions on their machine can install Apptainer using the instructions found here https://apptainer.org/docs/admin/main/installation.html.
+
+#### Building the Apptainer Container
+
+**Please be patient** when building the container, as Apptainer must download and convert the entire HIPS-THOMAS Docker container.
 ```
 apptainer build sthomas.sif docker://anagrammarian/sthomas
 ```
 
-#### Running with Apptainer at the Command Line
+#### Using Apptainer at the Command Line
 >[!NOTE]
 >The container (`sthomas.sif`) can be saved and run from any convenient directory and, therefore, must be explicitly specified in the Apptainer command. For example, if you save the container in your home bin directory (~/bin), you would specify the path to it as `~/bin/sthomas.sif`. (In the examples below, the path is specified as `/path/to/sthomas.sif`)
 
@@ -133,7 +132,7 @@ To process a WMn image (subj3_WMn.nii.gz) in the current directory:
 apptainer exec --cleanenv --bind ${PWD}:/data /path/to/sthomas.sif /thomas/src/hipsthomas.sh -t1 -i subj3_WMn.nii.gz
 ```
 
-#### Apptainer with Support Scripts
+#### Using Apptainer via Support Scripts
 
 Once you have built the Apptainer container, you can use an appropriate support script from this repository. For example, to run on a T1 image, in the current directory, run the T1 script:
 ```
