@@ -8,7 +8,7 @@
 This is the repository for HIPS-THOMAS, a Docker-based pipeline for accurate segmentation of thalamic and several other deep grey nuclei using the THOMAS segmentation program. HIPS-THOMAS processes both white-matter-nulled (WMn aka FGATIR) and standard T1-weighted (3D SPGR, MPRAGE, IR-SPGR) images. For standard T1 MRI it synthesizes WMn-like images prior to segmentation, resulting in much improved performance compared to majority voting and mutual information based registration approaches previously proposed. Specifically, for T1 images HIPS synthesizes WMn-MPRAGE-like images, improving thalamic contrast and also allowing standard THOMAS to be run (which then uses CC metric for nonlinear registration and joint fusion). This processing is not possible with T1 as the contrast is different from the template, thus forcing a mutual information metric (which is less accurate) and majority voting for label fusion (which is also suboptimal).
 
 >[!IMPORTANT]
-Th HIPS-THOMAS docker container documented here is brand-new. You should delete any older `anagrammarian/thomasmerged` containers on your computer and download the new one, as follows:
+The HIPS-THOMAS docker container documented here is brand-new. You should delete any older `anagrammarian/thomasmerged` containers on your computer and download the new one, as follows:
 ```
 docker image rm anagrammarian/thomasmerged
 docker pull anagrammarian/sthomas
