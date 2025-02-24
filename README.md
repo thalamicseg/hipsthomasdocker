@@ -127,7 +127,7 @@ apptainer exec --cleanenv --bind ${PWD}:/data /path/to/sthomas.sif /thomas/src/h
 ```
 To process a WMn image (subj3_WMn.nii.gz) in the current directory:
 ```
-apptainer exec --cleanenv --bind ${PWD}:/data /path/to/sthomas.sif /thomas/src/hipsthomas.sh -t1 -i subj3_WMn.nii.gz
+apptainer exec --cleanenv --bind ${PWD}:/data /path/to/sthomas.sif /thomas/src/hipsthomas.sh -i subj3_WMn.nii.gz
 ```
 
 #### Using Apptainer via Support Scripts
