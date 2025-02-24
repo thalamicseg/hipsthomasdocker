@@ -18,16 +18,17 @@ The HIPS-THOMAS docker container documented here is brand-new (as of 2/23/2025).
 ## Features
 This container-based version for THOMAS has a number of new features:
 1. It is based on Python 3.12 and uses a minimal number of modules from FSL, making it much smaller than previous versions (16G vs 41G).
-2. It now also segments the basal ganglia, claustrum, red nucleus and amygdala (with hippocampus/ventricles coming soon).
-3. It generates a quality control file called `stlabels_LR.png` and a composite label file with contiguous left and right labels (for deep learning training) called `stlabels_LR.nii.gz`. Both files are produced at the top level of output results: parallel with the `left` and `right` results directories.
+2. It now also segments the basal ganglia, claustrum, and red nucleus (with amygdala/hippocampus/ventricles coming very soon).
+3. It generates a quality control file called `sthomas_LR_labels.png` and a composite label file with contiguous left and right labels (for deep learning training) called `sthomas_LR_labels.nii.gz`. Both files are produced at the top level of output results: parallel with the `left` and `right` results directories.
 4. The Centrolateral (CL) nucleus is also generated, but with a different provenance so it is not fused in the thomas or thomasfull files but is available as `CL_L.nii.gz` and `CL_R.nii.gz` files for reference. It will overlap with other nuclei so use with judgment and caution.
 
 #### Differences from previous versions:
 1. The main script is now bash shell based and is called `hipsthomas.sh` (replacing hipsthomas_csh),
-2. The result files (`thomas_L`, `thomas_R`, `thomasfull_L`, and `thomasfull_R` now have both thalami and deep grey nuclei,
-3. The `nuclei_vols*.txt` files have volumes of both thalami and deep grey nuclei,
+2. The result files (`thomas_L`, `thomas_R`, `thomasfull_L`, and `thomasfull_R` now have both thalami and deep grey nuclei.
+3. The `nuclei_vols*.txt` files have volumes of both thalami and deep grey nuclei.
 4. The right side processing uses the same crop as the left side, so it is faster and you can combine L and R easily (e.g., using fslmaths).
-5. All outputs in the main left and right directories are full-size (and match the input T1 or WMn size exactly). Cropped outputs and other accessory files for debugging are now in EXTRAS folder
+5. All outputs in the main left and right directories are full-size (and match the input T1 or WMn size exactly). Cropped outputs and other accessory files for debugging are now in EXTRAS folder.
+6. The temporary directories, `temp` and `tempr`, are deleted automatically to save space unless the debug flag (-d) is used.
 
 ## Repository Resources
 
@@ -181,6 +182,8 @@ The directories named **left** and **right** contain the outputs, which include:
 | Basal Ganglia | 31-Put | Putamen |
 | Basal Ganglia | 33-GP | Globus Pallidus (GPe+GPi) |
 
+>[!NOTE]
+Note that the label numbers in the `thomas_L`, `thomas_R`, `thomasfull_L`, and `thomasfull_R` correspond to these labels (e.g., Pulvinar is 8, Claustrum is 28) and the label numbers are the same for the left and right sides. However, the `sthomas_LR_labels.nii.gz` file follows a very different numbering scheme (no gaps in numbers, left and right have different label numbers, etc). We will upload a LUT file in the near future.
 
 ## Citation
 The HIPS-THOMAS paper published in *Brain Structure and Function* can be found here: https://pubmed.ncbi.nlm.nih.gov/38546872/
@@ -196,6 +199,15 @@ The original *Neuroimage* paper on THOMAS can be found here https://pubmed.ncbi.
 
 ## Contact
 Please contact Manoj Saranathan manojkumar.saranathan@umassmed.edu if you have any questions or difficulties in installing or using THOMAS, or to report bugs or issues.
+
+## Contributors
+Thomas Hicks and Dianne Patterson (University of Arizona, Tucson) - design discussions and software engineering.
+
+Thomas Tourdias (Bordeaux) and Alberto Cacciola (Messina)- manual labeling of thalamic nuclei and deep grey nuclei.
+
+Julie Vidal (CNRS Toulouse) and Manoj Saranathan (UMass Chan Medical School, Worcester)- design, basic implementation, algorithms.
+
+Brian Rutt and Jason Su (Stanford)- original WMn THOMAS implementation.
 
 
 ## License
