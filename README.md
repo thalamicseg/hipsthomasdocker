@@ -1,8 +1,8 @@
+# HIPS-THOMAS
+
 >[!WARNING]
 >This Software has been designed for research purposes only and has not been reviewed or approved by the Food and Drug Administration or by any other agency. YOU ACKNOWLEDGE AND AGREE THAT CLINICAL APPLICATIONS ARE NEITHER RECOMMENDED NOR ADVISED. Any use of the Software is at the sole risk of the party or parties engaged in such use.
 
-# HIPS-THOMAS docker version 
-This is a docker container for HIPS-THOMAS, a new modified pipeline for accurate segmentation of T1w (SPGR,MPRAGE) data based on THOMAS. Note that HIPS-THOMAS performs much better than THOMAS for T1w data as it synthesizes WMn-like images from T1 prior to running THOMAS. The WMn-MPRAGE segmentation is unchanged and this container can be used on both T1w and WMn data by choosing the right wrapper script. 
 
 ## Introduction
 This is the repository for HIPS-THOMAS, a Docker-based pipeline for accurate segmentation of thalamic and several other deep grey nuclei using the THOMAS segmentation program. HIPS-THOMAS processes both white-matter-nulled (WMn aka FGATIR) and standard T1-weighted (3D SPGR, MPRAGE, IR-SPGR) images. For standard T1 MRI it synthesizes WMn-like images prior to segmentation, resulting in much improved performance compared to majority voting and mutual information based registration approaches previously proposed. Specifically, for T1 images HIPS synthesizes WMn-MPRAGE-like images, improving thalamic contrast and also allowing standard THOMAS to be run (which then uses CC metric for nonlinear registration and joint fusion). This processing is not possible with T1 as the contrast is different from the template, thus forcing a mutual information metric (which is less accurate) and majority voting for label fusion (which is also suboptimal).
@@ -30,7 +30,7 @@ This container-based version for THOMAS has a number of new features:
 5. All outputs in the main left and right directories are full-size (and match the input T1 or WMn size exactly). Cropped outputs and other accessory files for debugging are now in EXTRAS folder.
 6. The temporary directories, `temp` and `tempr`, are deleted automatically to save space unless the debug flag (-d) is used.
 
-- When the long 41Gb download finishes, type ```docker images``` to check if anagrammarian/thomasmerged is listed. You are good to go. 
+## Repository Resources
 
 -  **thomas_t1.sh**: is the main script to call to process T1 MPRAGE or SPGR files.
 -  **thomas_wmn.sh**: is the main script to call to process WMn MPRAGE/FGATIR files.
@@ -38,17 +38,6 @@ This container-based version for THOMAS has a number of new features:
 -  **thomas_tree.sh**: Supplemental script to process multiple image files within a directory tree.
 -  **example.tgz**: a gzipped tar file containing sample T1 and WMn images.
 
-- Copy the wrapper scripts thomaswmn and thomast1_hips to ~/bin and do a ```chmod +x thomas*``` to make the scripts executable prior to running
-- If you already have a thomas docker container and want to install a patch (300MB vs 41GB so much faster), see the 1.0 branch of hipsthomasdocker but is not recommended as that branch will not be maintained
-- **MAC USERS TAKE NOTE** Apple Silicon is not compatible with a lot of docker containers. So follow these steps-
-  
-	-Install Docker Desktop for Apple Silicon (make sure the space allocated for docker is 80GB or so as the container is 41GB)
-	
-	-Enable Rosetta in the operating system
-	
-	-Enable Rosetta in Docker Desktop
-	
-	-Enabling Rosetta in Docker Desktop requires OS 13 Ventura or greater
 
 ## Installation
 >[!IMPORTANT]
@@ -102,10 +91,6 @@ docker run -it --rm --name sthomas -v ${PWD}:/data -w /data --user ${UID}:${GID}
 docker run -it --rm --name sthomas -v ${PWD}:/data -w /data anagrammarian/sthomas hipsthomas.sh -v -i CAM003_WMn.nii.gz
 ```
 
-## Common issues
-- The first cropping step of THOMAS occasionally fails in older patients due to presence of neck tissue. If you are seeing failures (abormally small or large values of 1-THALAMUS typically 3000-6000 is normal, anything outside is suspect, any 0s in nuclei typically 2-AV or 9-LGN or 10-MGN are also indicative of crop failures albeit more subtle asymmetric crop than complete failure) view crop_T1.nii.gz from left and the central slice should have both thalami.
-  
-- In case of a crop failure, try running ```bet``` and then run thomas on brain extracted data. The bet command we recommend is ```bet input output -B -R``` where input is your T1 image. Note that ```bet``` is available inside the docker container which can be entered using ```docker run -v ${PWD}:${PWD} -w ${PWD} --rm -it thomasmerged``` and you can simply run bet here on a case by case basis or write a batch script. This is useful if bet is not installed locally
 
 ### or Running with the Support Scripts
 
@@ -207,12 +192,9 @@ The HIPS-THOMAS paper published in *Brain Structure and Function* can be found h
 
 	Vidal JP, Danet L, Péran P, Pariente J, Bach Cuadra M, Zahr NM, Barbeau EJ, Saranathan M. Robust thalamic nuclei segmentation from T1-weighted MRI using polynomial intensity transformation. Brain Structure and Function; 229(5):1087-1101 (2024)
 
-	Vidal JP, Danet L, Péran P, Pariente J, Bach Cuadra M, Zahr NM, Barbeau EJ, Saranathan M. Robust thalamic nuclei segmentation from T1-weighted MRI using polynomial intensity transformation. *Brain Structure and Function*; 2024 
+The original *Neuroimage* paper on THOMAS can be found here https://pubmed.ncbi.nlm.nih.gov/30894331/
 
-The original Neuroimage paper on THOMAS can be found here https://pubmed.ncbi.nlm.nih.gov/30894331/
-
-	Su J, Thomas FT, Kasoff WS, Tourdias T, Choi EY, Rutt BK, Saranathan M. Robust thalamic nuclei segmentation from T1-weighted MRI. *NeuroImage*; 194:272-282 (2019)
-
+	Su J, Thomas FT, Kasoff WS, Tourdias T, Choi EY, Rutt BK, Saranathan M. Thalamus Optimized Multi-atlas Segmentation (THOMAS): fast, fully automated segmentation of thalamic nuclei from anatomical MRI. NeuroImage; 194:272-282 (2019)
 
 
 ## Contact
