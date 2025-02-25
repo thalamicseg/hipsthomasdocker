@@ -81,12 +81,12 @@ docker run -it --rm --name sthomas -v ${PWD}:/data -w /data --user ${UID}:${GID}
 docker run -it --rm --name sthomas -v ${PWD}:/data -w /data anagrammarian/sthomas hipsthomas.sh -v -t1 -i subj1.nii.gz
 ```
 
-**WMn on Linux or Windows Ubuntu WSL**: Given a WMn input image (WMn.nii.gz) in the current working directory, processing can be initiated by the following Docker command:
+**FGATIR/WMn on Linux or Windows Ubuntu WSL**: Given a WMn input image (WMn.nii.gz) in the current working directory, processing can be initiated by the following Docker command:
 ```
 docker run -it --rm --name sthomas -v ${PWD}:/data -w /data --user ${UID}:${GID} anagrammarian/sthomas hipsthomas.sh -v -i WMn.nii.gz
 ```
 
-**WMn on macOS or Windows Docker Desktop**: In these environments, you should omit the `--user` flag and the user ID (`UID`) and group ID (`GID`) arguments. So, for a WMn image (CAM003_WMn.nii.gz) in the current working directory:
+**FGATIR/WMn on macOS or Windows Docker Desktop**: In these environments, you should omit the `--user` flag and the user ID (`UID`) and group ID (`GID`) arguments. So, for a WMn image (CAM003_WMn.nii.gz) in the current working directory:
 ```
 docker run -it --rm --name sthomas -v ${PWD}:/data -w /data anagrammarian/sthomas hipsthomas.sh -v -i CAM003_WMn.nii.gz
 ```
@@ -183,7 +183,7 @@ The directories named **left** and **right** contain the outputs, which include:
 | Basal Ganglia | 33-GP | Globus Pallidus (GPe+GPi) |
 
 >[!NOTE]
-Note that the label numbers in the `thomas_L`, `thomas_R`, `thomasfull_L`, and `thomasfull_R` correspond to these labels (e.g., Pulvinar is 8, Claustrum is 28) and the label numbers are the same for the left and right sides. However, the `sthomas_LR_labels.nii.gz` file follows a very different numbering scheme (no gaps in numbers, left and right have different label numbers, etc). We will upload a LUT file in the near future.
+Note that the label numbers in the `thomas_L`, `thomas_R`, `thomasfull_L`, and `thomasfull_R` correspond to these labels (e.g., Pulvinar is 8, Claustrum is 28 and so on) and the label numbers are the same for the left and right sides. However, the `sthomas_LR_labels.nii.gz` file follows a very different numbering scheme (no gaps in numbers, left and right have different label numbers, etc). We will upload a LUT file in the near future.
 
 ## Citation
 The HIPS-THOMAS paper published in *Brain Structure and Function* can be found here: https://pubmed.ncbi.nlm.nih.gov/38546872/
@@ -203,11 +203,11 @@ Please contact Manoj Saranathan manojkumar.saranathan@umassmed.edu if you have a
 ## Contributors
 Thomas Hicks and Dianne Patterson (University of Arizona, Tucson) - design discussions and software engineering.
 
-Thomas Tourdias (Bordeaux) and Alberto Cacciola (Messina)- manual labeling of thalamic nuclei and deep grey nuclei.
+Thomas Tourdias (Bordeaux University Hospital) and Alberto Cacciola (University of Messina)- manual labeling of thalamic nuclei and deep grey nuclei.
 
 Julie Vidal (CNRS Toulouse) and Manoj Saranathan (UMass Chan Medical School, Worcester)- design, basic implementation, algorithms.
 
-Brian Rutt and Jason Su (Stanford)- original WMn THOMAS implementation.
+Brian Rutt and Jason Su (Stanford University)- original WMn THOMAS implementation.
 
 
 ## License
@@ -215,4 +215,4 @@ Brian Rutt and Jason Su (Stanford)- original WMn THOMAS implementation.
 >[!WARNING]
 >This Software is provided "AS IS" and neither University of Arizona (UofAZ) nor any contributor to the software (each a "Contributor") shall have any obligation to provide maintenance, support, updates, enhancements or modifications thereto. UofAZ AND ALL CONTRIBUTORS SPECIFICALLY DISCLAIM ALL EXPRESS AND IMPLIED WARRANTIES OF ANY KIND INCLUDING, BUT NOT LIMITED TO, ANY WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL UofAZ OR ANY CONTRIBUTOR BE LIABLE TO ANY PARTY FOR DIRECT, INDIRECT, SPECIAL, INCIDENTAL, EXEMPLARY OR CONSEQUENTIAL DAMAGES HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY ARISING IN ANY WAY RELATED TO THE SOFTWARE, EVEN IF UofAZ OR ANY CONTRIBUTOR HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. TO THE MAXIMUM EXTENT NOT PROHIBITED BY LAW OR REGULATION, YOU FURTHER ASSUME ALL LIABILITY FOR YOUR USE, REPRODUCTION, MAKING OF DERIVATIVE WORKS, DISPLAY, LICENSE OR DISTRIBUTION OF THE SOFTWARE AND AGREE TO INDEMNIFY AND HOLD HARMLESS UofAZ AND ALL CONTRIBUTORS FROM AND AGAINST ANY AND ALL CLAIMS, SUITS, ACTIONS, DEMANDS AND JUDGMENTS ARISING THEREFROM.
 
-© Copyright Manoj Saranathan, Julie Vidal 2023. All rights reserved.
+© Copyright Manoj Saranathan, Julie Vidal 2023 2024 2025. All rights reserved.
