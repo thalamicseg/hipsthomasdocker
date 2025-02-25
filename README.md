@@ -155,15 +155,15 @@ Optional Arguments:
 where:
     -co = crop only.
     -d  = turn on Debugging mode (forces serial processing, retains temp directories).
-    -dm = use the denoise mask.
-    -oldt1 = process a T1 image but don't do HIPS white matter null synthesis. Uses majority voting.
+    -dm = use the denoise mask (useful for skull-stripped data)
+    -oldt1 = process a T1 image but do not do HIPS white-matter-nulled synthesis. Uses majority voting.
              WARNING: use this flag OR the -t1 flag, not both.
     -sc = Use smaller crop.
           WARNING: this will not produce reliable results for non-Thalamic structures.
     -um = use mask.
     -v = run in Verbose mode (included in the wrapper scripts by default).
-    -xf fixedImageMask
-    -xm movingImageMask
+    -xf fixedImageMask (useful for lesion cases)
+    -xm movingImageMask (useful for lesion cases)
 ```
 
 ## Outputs
