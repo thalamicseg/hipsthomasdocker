@@ -143,6 +143,28 @@ For a WMn/FGATIR image, in the current directory, run the WMn script:
 /path/to/thomas_wmn_apptainer.sh /path/to/sthomas.sif subj2_WMn.nii.gz
 ```
 
+### Additional Arguments (for Advanced User Scenarios)
+
+Several additional, optional arguments for the program are available to users to modify the scripts or to use on the command line:
+
+```
+Optional Arguments:
+
+[-xf fixedImageMask] [-xm movingImageMask] [-co] [-d] [-dm] [-oldt1] [-sc] [-um] [-v]
+
+where:
+    -co = crop only.
+    -d  = turn on Debugging mode (forces serial processing, retains temp directories).
+    -dm = use the denoise mask.
+    -oldt1 = process a T1 image but don't do HIPS white matter null synthesis. Uses majority voting.
+             WARNING: use this flag OR the -t1 flag, not both.
+    -sc = Use smaller crop.
+          WARNING: this will not produce reliable results for non-Thalamic structures.
+    -um = use mask.
+    -v = run in Verbose mode (included in the wrapper scripts by default).
+    -xf fixedImageMask
+    -xm movingImageMask
+```
 
 ## Outputs
 The directories named **left** and **right** contain the outputs, which include:
