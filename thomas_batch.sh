@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# Important: Edit lines 32 34 below to use the appropriate wrapper script
 # Check if the directory and t1/wmn choice is provided
 
 if [ "$#" -ne 2 ]; then
@@ -28,6 +28,7 @@ process_files() {
 #            (cd "$dir" && eval "$USER_COMMAND \"$relative_path\"")
             cd $dir
             if [ "$CTYPE" == "t1" ] || [ "$CTYPE" == "T1" ]; then 
+            # Call the appropriate thomas wrapper script here 
                 echo "Running thomast1 in ${dir#./} on $fileb"
             else
                 echo "Running thomaswmn in ${dir#./} on $fileb"
