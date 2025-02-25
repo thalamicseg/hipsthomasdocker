@@ -28,9 +28,12 @@ process_files() {
 #            (cd "$dir" && eval "$USER_COMMAND \"$relative_path\"")
             cd $dir
             if [ "$CTYPE" == "t1" ] || [ "$CTYPE" == "T1" ]; then 
-            # Call the appropriate thomas wrapper script here 
+            # Call the appropriate thomas t1 wrapper script here 
+            # e.g. /path/to/thomas_t1.sh $fileb
                 echo "Running thomast1 in ${dir#./} on $fileb"
             else
+            # Call the appropriate thomas wmn wrapper script here 
+            # e.g. /path/to/thomas_wmn.sh $fileb
                 echo "Running thomaswmn in ${dir#./} on $fileb"
             fi
         fi
