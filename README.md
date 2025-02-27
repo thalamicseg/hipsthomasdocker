@@ -73,20 +73,20 @@ The following example Docker command lines assume `bash` as the shell. Also, run
 
 **T1 on Linux or Windows Ubuntu WSL**: Given a T1 input image (T1.nii.gz) in the current working directory, processing can be initiated by the following Docker command:
 ```
-docker run -it --rm --name sthomas -v ${PWD}:/data -w /data --user ${UID}:${GID} anagrammarian/sthomas hipsthomas.sh -v -t1 -i T1.nii.gz
+docker run -it --rm --name sthomas -v ${PWD}:/data -w /data --user ${UID}:$(id -g) anagrammarian/sthomas hipsthomas.sh -v -t1 -i T1.nii.gz
 ```
 
-**T1 on macOS or Windows Docker Desktop**: In these environments, you should omit the `--user` flag and the user ID (`UID`) and group ID (`GID`) arguments. So, for a T1 image (subj1.nii.gz) in the current working directory:
+**T1 on macOS or Windows Docker Desktop**: In these environments, you should omit the `--user` flag and the user ID (`UID`) and group ID arguments. So, for a T1 image (subj1.nii.gz) in the current working directory:
 ```
 docker run -it --rm --name sthomas -v ${PWD}:/data -w /data anagrammarian/sthomas hipsthomas.sh -v -t1 -i subj1.nii.gz
 ```
 
 **FGATIR/WMn on Linux or Windows Ubuntu WSL**: Given a WMn input image (WMn.nii.gz) in the current working directory, processing can be initiated by the following Docker command:
 ```
-docker run -it --rm --name sthomas -v ${PWD}:/data -w /data --user ${UID}:${GID} anagrammarian/sthomas hipsthomas.sh -v -i WMn.nii.gz
+docker run -it --rm --name sthomas -v ${PWD}:/data -w /data --user ${UID}:$(id -g) anagrammarian/sthomas hipsthomas.sh -v -i WMn.nii.gz
 ```
 
-**FGATIR/WMn on macOS or Windows Docker Desktop**: In these environments, you should omit the `--user` flag and the user ID (`UID`) and group ID (`GID`) arguments. So, for a WMn image (CAM003_WMn.nii.gz) in the current working directory:
+**FGATIR/WMn on macOS or Windows Docker Desktop**: In these environments, you should omit the `--user` flag and the user ID (`UID`) and group ID arguments. So, for a WMn image (CAM003_WMn.nii.gz) in the current working directory:
 ```
 docker run -it --rm --name sthomas -v ${PWD}:/data -w /data anagrammarian/sthomas hipsthomas.sh -v -i CAM003_WMn.nii.gz
 ```
