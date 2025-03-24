@@ -1,7 +1,7 @@
 #!/bin/bash
 # Wrapper for running HIPS THOMAS in docker container for a filetree of T1 MPRAGE/SPGR or WMn MPRAGE/FGATIR files.
 #
-DK_IMG=thomas3
+DK_IMG=anagrammarian/sthomas
 
 function Usage () {
   echo ""
