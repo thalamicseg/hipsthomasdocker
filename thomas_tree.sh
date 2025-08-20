@@ -15,6 +15,15 @@ function Usage () {
   echo ""
 }
 
+#######################################################
+## Temporary retraction of this function. -TRH 8/20/2025
+echo ''
+echo "Sorry: This function is a temporarily disabled. We hope to have it restored"
+echo "after further code testing. Thank you for your patience. (8/20/2025)"
+echo ''
+exit 99
+#######################################################
+
 function get_abs_path () {
   echo "$(cd "$(dirname "$1")" && pwd)/$(basename "$1")"
 }
