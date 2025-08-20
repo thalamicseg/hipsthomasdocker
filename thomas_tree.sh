@@ -54,4 +54,4 @@ fi
 
 cd $ROOT_DIR
 echo "Running container ${DK_IMG} on images in directory ${ROOT_DIR}..."
-time docker run -it --rm --name thomast -v ${ROOT_DIR}:/data -w /data ${USER_IDS} ${DK_IMG} thomas_tree.py -v ${IMAGE_TYPE} ${OVERWRITE}
+time docker run -it --rm --name thomast -v ${ROOT_DIR}:/data -w /data ${USER_IDS} ${DK_IMG} thomas_tree.py --verbose ${IMAGE_TYPE} ${OVERWRITE}
