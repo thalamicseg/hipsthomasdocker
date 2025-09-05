@@ -1,11 +1,11 @@
-# HIPS-THOMAS
+# HIPS-THOMAS/sTHOMAS
 
 >[!WARNING]
 >This Software has been designed for research purposes only and has not been reviewed or approved by the Food and Drug Administration or by any other agency. YOU ACKNOWLEDGE AND AGREE THAT CLINICAL APPLICATIONS ARE NEITHER RECOMMENDED NOR ADVISED. Any use of the Software is at the sole risk of the party or parties engaged in such use.
 
 
 ## Introduction
-This is the repository for HIPS-THOMAS, a Docker-based pipeline for accurate segmentation of thalamic and several other deep grey nuclei using the THOMAS segmentation program. HIPS-THOMAS processes both white-matter-nulled (WMn aka FGATIR) and standard T1-weighted (3D SPGR, MPRAGE, IR-SPGR) images. For standard T1 MRI it synthesizes WMn-like images prior to segmentation, resulting in much improved performance compared to majority voting and mutual information based registration approaches previously proposed. Specifically, for T1 images HIPS synthesizes WMn-MPRAGE-like images, improving thalamic contrast and also allowing standard THOMAS to be run (which then uses CC metric for nonlinear registration and joint fusion). This processing is not possible with T1 as the contrast is different from the template, thus forcing a mutual information metric (which is less accurate) and majority voting for label fusion (which is also suboptimal).
+This is the repository for HIPS-THOMAS and sTHOMAS (merged now), a Docker-based pipeline for accurate segmentation of thalamic and several other deep grey nuclei using the THOMAS segmentation program. It processes both white-matter-nulled (WMn aka FGATIR) and standard T1-weighted (3D SPGR, MPRAGE, IR-SPGR) images. For standard T1 MRI it synthesizes WMn-like images prior to segmentation, resulting in much improved performance compared to majority voting and mutual information based registration approaches previously proposed. Specifically, for T1 images it synthesizes WMn-MPRAGE-like images, improving thalamic contrast and also allowing standard THOMAS to be run (which then uses CC metric for nonlinear registration and joint fusion). This processing is not possible with T1 as the contrast is different from the template, thus forcing a mutual information metric (which is less accurate) and majority voting for label fusion (which is also suboptimal). 
 
 >[!IMPORTANT]
 The HIPS-THOMAS docker container documented here is brand-new (as of 2/23/2025). You should delete any older `anagrammarian/thomasmerged` containers on your computer and download the new one (see [Installation section](#installation) below).
@@ -225,7 +225,7 @@ sTHOMAS (in review, see arxiv below)
 	Saranathan M. et al. Comprehensive segmentation of deep grey nuclei from structural MRI data. Arxiv; https://arxiv.org/abs/2503.21955 (2025)
  
 The sTHOMAS deep grey nuclei segmentation paper that includes the basal ganglia, claustrum, amygdala and red nucleus along with thalamic nuclei is under review but the preprint can be found 
-here https://arxiv.org/abs/2503.21955
+here https://arxiv.org/abs/2503.21955  Manuscript accepted in HBM Sep 2025, will be out Oct 2025.
 
 
 ## Contact
