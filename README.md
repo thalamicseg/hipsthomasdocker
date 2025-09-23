@@ -18,9 +18,9 @@ The HIPS-THOMAS docker container documented here is brand-new (as of 2/23/2025).
 ## Features
 This container-based version for THOMAS has a number of new features:
 1. It is based on Python 3.12 and uses a minimal number of modules from FSL, making it much smaller than previous versions (16G vs 41G).
-2. It now also segments the basal ganglia, claustrum, and red nucleus (with amygdala/hippocampus/ventricles coming very soon).
+2. It now also segments the basal ganglia, claustrum, amygdala, and red nucleus (hippocampus/ventricles/mammillary bodies coming very soon).
 3. It generates a quality control file called `sthomas_LR_labels.png` and a composite label file with contiguous left and right labels (for deep learning training) called `sthomas_LR_labels.nii.gz`. Both files are produced at the top level of output results: parallel with the `left` and `right` results directories.
-4. The Centrolateral (CL) nucleus is also generated, but with a different provenance so it is not fused in the thomas or thomasfull files but is available as `CL_L.nii.gz` and `CL_R.nii.gz` files for reference. It will overlap with other nuclei so use with judgment and caution.
+4. The Centrolateral (CL) nucleus is also generated, but it has a different provenance so it is not fused in the thomas or thomasfull files but is available as `CL_L.nii.gz` and `CL_R.nii.gz` files for reference. It will overlap with other nuclei so use with judgment and caution.
 
 #### Differences from previous versions:
 1. The main script is now bash shell based and is called `hipsthomas.sh` (replacing hipsthomas_csh),
