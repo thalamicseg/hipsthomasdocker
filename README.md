@@ -1,11 +1,13 @@
-# HIPS-THOMAS/sTHOMAS
+# THOMAS/HIPS-THOMAS/sTHOMAS
 
 >[!WARNING]
 >This Software has been designed for research purposes only and has not been reviewed or approved by the Food and Drug Administration or by any other agency. YOU ACKNOWLEDGE AND AGREE THAT CLINICAL APPLICATIONS ARE NEITHER RECOMMENDED NOR ADVISED. Any use of the Software is at the sole risk of the party or parties engaged in such use.
 
 
 ## Introduction
-This is the repository for HIPS-THOMAS and sTHOMAS (merged now), a Docker-based pipeline for accurate segmentation of thalamic and several other deep grey nuclei using the THOMAS segmentation program. It processes both white-matter-nulled (WMn aka FGATIR) and standard T1-weighted (3D SPGR, MPRAGE, IR-SPGR) images. For standard T1 MRI it synthesizes WMn-like images prior to segmentation, resulting in much improved performance compared to majority voting and mutual information based registration approaches previously proposed. Specifically, for T1 images it synthesizes WMn-MPRAGE-like images, improving thalamic contrast and also allowing standard THOMAS to be run (which then uses CC metric for nonlinear registration and joint fusion). This processing is not possible with T1 as the contrast is different from the template, thus forcing a mutual information metric (which is less accurate) and majority voting for label fusion (which is also suboptimal). 
+This is the repository for HIPS-THOMAS and sTHOMAS (merged now), a Docker-based pipeline for accurate segmentation of thalamic and several other deep grey nuclei using the original THOMAS segmentation program. We refer to HIPS-THOMAS below but it is the same as s-THOMAS i.e. it produces a complete deep grey nuclei segmentation. If your outputs do not contain basal nuclei etc, please update the container (see [Installation section](#installation) below).
+
+It can process both white-matter-nulled (WMn) MPRAGE aka FGATIR and standard T1-weighted (3D SPGR, MPRAGE, IR-SPGR) images. Specifically, for T1 images it synthesizes WMn-MPRAGE-like images, improving thalamic contrast and also allowing standard THOMAS to be run (which then uses CC metric for nonlinear registration and joint fusion). This processing is not possible with native T1 as the contrast is different from the template, thus forcing a mutual information metric (which is less accurate) and majority voting for label fusion (which is also suboptimal). 
 
 >[!IMPORTANT]
 The HIPS-THOMAS docker container documented here is brand-new (as of 2/23/2025). You should delete any older `anagrammarian/thomasmerged` containers on your computer and download the new one (see [Installation section](#installation) below).
@@ -16,7 +18,7 @@ The HIPS-THOMAS docker container documented here is brand-new (as of 2/23/2025).
 
 
 ## Features
-This container-based version for THOMAS has a number of new features:
+This container-based version has a number of new features:
 1. It is based on Python 3.12 and uses a minimal number of modules from FSL, making it much smaller than previous versions (16G vs 41G).
 2. It now also segments the basal ganglia, claustrum, amygdala, and red nucleus (hippocampus/ventricles/mammillary bodies coming very soon).
 3. It generates a quality control file called `sthomas_LR_labels.png` and a composite label file with contiguous left and right labels (for deep learning training) called `sthomas_LR_labels.nii.gz`. Both files are produced at the top level of output results: parallel with the `left` and `right` results directories.
