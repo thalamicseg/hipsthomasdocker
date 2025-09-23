@@ -209,7 +209,12 @@ Note that the label numbers in the `thomas_L`, `thomas_R`, `thomasfull_L`, and `
 
 ## Citation
 
-HIPS-THOMAS 
+s-THOMAS (the current version which includes basal nuclei, claustrum, amygdala etc in additin to thalamic nuclei) 
+
+	Saranathan M, Coligandro G, Hicks T, Patterson D, Vachha B, Hader A, Shazeeb MS, Cacciola A. Comprehensive Segmentation of Deep Grey Nuclei From Structural MRI Data. Human Brain Mapping; Volume 46, Issue 14) (2025)
+The *HBM* paper on s-THOMAS can be found here: https://onlinelibrary.wiley.com/doi/10.1002/hbm.70350 and the *arXiv* preprint on s-THOMAS can be found at  https://arxiv.org/abs/2503.21955
+
+HIPS-THOMAS (this introduced the HIPS concept for thalamic nuclei segmentation)
 
 	Vidal JP, Danet L, Péran P, Pariente J, Bach Cuadra M, Zahr NM, Barbeau EJ, Saranathan M. Robust thalamic nuclei segmentation from T1-weighted MRI using polynomial intensity transformation. Brain Structure and Function; 229(5):1087-1101 (2024)
 The *Brain Structure and Function* paper on HIPS-THOMAS can be found here: https://pubmed.ncbi.nlm.nih.gov/38546872/ and the *medRxiv* preprint on HIPS-THOMAS can be found at https://www.medrxiv.org/content/10.1101/2024.01.30.24301606v1
@@ -219,13 +224,6 @@ THOMAS
 	Su J, Thomas FT, Kasoff WS, Tourdias T, Choi EY, Rutt BK, Saranathan M. Thalamus Optimized Multi-atlas Segmentation (THOMAS): fast, fully automated segmentation of thalamic nuclei from anatomical MRI. NeuroImage; 194:272-282 (2019)
 
 The *Neuroimage* paper on THOMAS can be found here https://pubmed.ncbi.nlm.nih.gov/30894331/
-
-sTHOMAS (in review, see arxiv below)
-
-	Saranathan M. et al. Comprehensive segmentation of deep grey nuclei from structural MRI data. Arxiv; https://arxiv.org/abs/2503.21955 (2025)
- 
-The sTHOMAS deep grey nuclei segmentation paper that includes the basal ganglia, claustrum, amygdala and red nucleus along with thalamic nuclei is under review but the preprint can be found 
-here https://arxiv.org/abs/2503.21955  Manuscript accepted in HBM Sep 2025, will be out Oct 2025.
 
 
 ## Contact
