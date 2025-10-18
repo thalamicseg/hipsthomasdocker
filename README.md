@@ -211,7 +211,7 @@ Note that the label numbers in the `thomas_L`, `thomas_R`, `thomasfull_L`, and `
 
 ## Citation
 
-s-THOMAS (the current version which includes basal nuclei, claustrum, amygdala etc in additin to thalamic nuclei) 
+s-THOMAS (the current version which includes basal nuclei, claustrum, amygdala etc in addition to thalamic nuclei) 
 
 	Saranathan M, Coligandro G, Hicks T, Patterson D, Vachha B, Hader A, Shazeeb MS, Cacciola A. Comprehensive Segmentation of Deep Grey Nuclei From Structural MRI Data. Human Brain Mapping; Volume 46, Issue 14) (2025)
 The *HBM* paper on s-THOMAS can be found here: https://onlinelibrary.wiley.com/doi/10.1002/hbm.70350 and the *arXiv* preprint on s-THOMAS can be found at  https://arxiv.org/abs/2503.21955
